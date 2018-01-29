@@ -7,7 +7,7 @@ using System.Reflection;
 public class DirectionalLightScript : MonoBehaviour {
 
     public Text parameterText;
-    public float m_Interval = 2f;
+    public float m_Interval = 1f;
     public float m_LerpSpeed = 2f;
     public Texture[] allTextures;
 
@@ -41,13 +41,13 @@ public class DirectionalLightScript : MonoBehaviour {
         
         selection = GetComponent<Light>();
 
-        TestFloatLerps();
+        //TestFloatLerps();
 
         //TestReflectionFunctions();
 
         //StartCoroutine(RandomizeInterval()); 
 
-        //StartCoroutine(RandomizeLerp());
+        StartCoroutine(RandomizeLerp());
     }
 	
 	// Update is called once per frame
@@ -159,12 +159,12 @@ public class DirectionalLightScript : MonoBehaviour {
             Debug.Log(t);
 
             transform.rotation = Quaternion.Lerp(m_OriginalRotation, m_TargetRotation, t);
-            //selection.color = Color.Lerp(selection.color, m_TargetColor, t);
-            //selection.intensity = Mathf.Lerp(selection.intensity, m_TargetIntensity, t);
-            //selection.shadowStrength = Mathf.Lerp(selection.shadowStrength, m_TargetShadowStrength, t);
-            //selection.shadowBias = Mathf.Lerp(selection.shadowBias, m_TargetShadowBias, t);
-            //selection.shadowNormalBias = Mathf.Lerp(selection.shadowNormalBias, m_TargetShadowNormalBias, t);
-            //selection.shadowNearPlane = Mathf.Lerp(selection.shadowNearPlane, m_TargetShadowNearPlane, t);
+            selection.color = Color.Lerp(selection.color, m_TargetColor, t);
+            selection.intensity = Mathf.Lerp(selection.intensity, m_TargetIntensity, t);
+            selection.shadowStrength = Mathf.Lerp(selection.shadowStrength, m_TargetShadowStrength, t);
+            selection.shadowBias = Mathf.Lerp(selection.shadowBias, m_TargetShadowBias, t);
+            selection.shadowNormalBias = Mathf.Lerp(selection.shadowNormalBias, m_TargetShadowNormalBias, t);
+            selection.shadowNearPlane = Mathf.Lerp(selection.shadowNearPlane, m_TargetShadowNearPlane, t);
 
             if (elapsed >= m_Interval) {
                 elapsed = 0f;
@@ -216,9 +216,8 @@ public class DirectionalLightScript : MonoBehaviour {
 
             selection.shadowNearPlane = m_TargetShadowNearPlane;
 
-            selection.cookie = allTextures[Mathf.FloorToInt(Random.value * allTextures.Length)];
-
-            selection.cookieSize = Random.value * 100f;
+            //selection.cookie = allTextures[Mathf.FloorToInt(Random.value * allTextures.Length)];
+            //selection.cookieSize = Random.value * 100f;
 
             yield return new WaitForSeconds(m_Interval);
         }

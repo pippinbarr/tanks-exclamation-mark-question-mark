@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameterText: {fileID: 1527536671}
-  m_Interval: 5
+  m_Interval: 2
   m_LerpSpeed: 2
   allTextures:
   - {fileID: 2800000, guid: ab943d3d5ac38bb448fabe3cdc9516d1, type: 3}
@@ -660,7 +660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1304999365
 MonoBehaviour:
   m_ObjectHideFlags: 0
