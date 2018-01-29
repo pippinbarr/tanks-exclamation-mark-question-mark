@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
 
 public class DirectionalLightScript : MonoBehaviour {
 
@@ -21,18 +22,47 @@ public class DirectionalLightScript : MonoBehaviour {
 
     private float elapsed = 0f;
 
+    private string intensity = "intensity";
+
 
 	// Use this for initialization
 	void Start () {
+        
         dl = GetComponent<Light>();
+
+        DoCrazyReflectionShit();
 
         //StartCoroutine(RandomizeInterval()); 
 
-        StartCoroutine(RandomizeLerp());    
-	}
+        //StartCoroutine(RandomizeLerp());
+    }
 	
 	// Update is called once per frame
     void Update () {
+    }
+
+    void DoCrazyReflectionShit()
+    {
+        // This gets the color property out as a color
+        Color c = (Color)dl.GetType().GetProperty("color").GetValue(dl, null);
+        Debug.Log(c);
+
+        // This pulls the setter method information
+        MethodInfo setter = dl.GetType().GetProperty("color").GetSetMethod();
+
+        MethodInfo getter = dl.GetType().GetProperty("color").GetGetMethod();
+
+        // This involves the set method
+        setter.Invoke(dl, new object[] { new Color(1000, 0, 0) });
+
+        Color got = (Color)getter.Invoke(dl, null);
+        Debug.Log(got);
+
+        // This works to set the color property via creating a new Color
+        //dl.GetType().GetProperty("color").SetValue(dl, new Color(0.5f,0f,0f), null);
+
+        // This will print out a pretty specific identification of the particular instance
+        Debug.Log(dl.GetType() + ", name: " + dl.name + ", id: " + dl.GetInstanceID());
     }
 
     IEnumerator RandomizeLerp()
