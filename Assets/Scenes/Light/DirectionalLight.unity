@@ -277,9 +277,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80f08c918e1449719a896f26d68d3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parameterText: {fileID: 1527536671}
-  m_Interval: 2
-  m_LerpSpeed: 2
+  m_ParameterText: {fileID: 1527536671}
+  m_MinimumLerpTime: 0.2
+  m_MaximumLerpTime: 0.2
   allTextures:
   - {fileID: 2800000, guid: ab943d3d5ac38bb448fabe3cdc9516d1, type: 3}
   - {fileID: 2800000, guid: c7dd97e9cd879304795b366cbf187bfe, type: 3}
@@ -566,6 +566,22 @@ Prefab:
       propertyPath: m_CookieSize
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
+      propertyPath: m_Shadows.m_NearPlane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 10878784, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
   m_IsPrefabParent: 0
@@ -660,7 +676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1304999365
 MonoBehaviour:
   m_ObjectHideFlags: 0

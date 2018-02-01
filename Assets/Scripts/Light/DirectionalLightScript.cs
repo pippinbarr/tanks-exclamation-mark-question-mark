@@ -2,224 +2,229 @@
 //using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+//using System;
 using System.Reflection;
 
 public class DirectionalLightScript : MonoBehaviour {
 
-    public Text parameterText;
-    public float m_Interval = 1f;
-    public float m_LerpSpeed = 2f;
+    public Text m_ParameterText;
+    public float m_MinimumLerpTime = 1f;
+    public float m_MaximumLerpTime = 2f;
     public Texture[] allTextures;
 
-    private Light selection;
+    private Light m_Selection;
+    private string m_CurrentParameterName;
+    private float m_CurrentLerpTime;
+    private bool m_LerpComplete = true;
 
-
-    private Quaternion m_OriginalRotation;
-    private Quaternion m_TargetRotation;
-    private Color m_TargetColor;
-    private float m_TargetIntensity;
-    private float m_TargetShadowStrength;
-    private float m_TargetShadowBias;
-    private float m_TargetShadowNormalBias;
-    private float m_TargetShadowNearPlane;
-
-    private float elapsed = 0f;
-
-    private ArrayList[] parameters = {
+    private ArrayList[] m_Parameters = {
+        new ArrayList(new object[]{ "LerpEnum", "shadows", "LightShadows.None","LightShadows.Soft","LightShadows.Hard" }),
+        new ArrayList(new object[]{ "LerpEnum", "renderMode", "LightRenderMode.Auto","LightRenderMode.ForcePixel","LightRenderMode.ForceVertex" }),
+        new ArrayList(new object[]{ "LerpRotation", "rotation" }),
+        new ArrayList(new object[]{ "LerpColor", "color" }),
         new ArrayList(new object[]{ "LerpFloat", "intensity", 0f, 2f }),
         new ArrayList(new object[]{ "LerpFloat", "shadowStrength", 0f, 1f }),
         new ArrayList(new object[]{ "LerpFloat", "shadowBias", 0f, 2f }),
         new ArrayList(new object[]{ "LerpFloat", "shadowNormalBias", 0f, 3f }),
         new ArrayList(new object[]{ "LerpFloat", "shadowNearPlane", 0f, 10f }),
     };
-    private bool lerpComplete = true;
+
 
 
 
 	// Use this for initialization
 	void Start () {
-        
-        selection = GetComponent<Light>();
-
-        //TestFloatLerps();
-
-        //TestReflectionFunctions();
-
-        //StartCoroutine(RandomizeInterval()); 
-
-        StartCoroutine(RandomizeLerp());
-    }
-	
-	// Update is called once per frame
-    void Update () {
-    }
-
-    void TestFloatLerps()
-    {
+        Light[] lights = FindObjectsOfType<Light>();
+        m_Selection = lights[Mathf.FloorToInt(Random.value * lights.Length)];
         StartCoroutine(StartLerps());
     }
+	
 
     IEnumerator StartLerps()
     {
         while (true)
         {
-            if (lerpComplete)
+            if (m_LerpComplete)
             {
-                lerpComplete = false;
-                ArrayList parameterToLerp = parameters[Mathf.FloorToInt(Random.value * parameters.Length)];
+                m_LerpComplete = false;
+                ArrayList parameterToLerp = m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Length)];
+                m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
                 StartCoroutine((string)parameterToLerp[0], parameterToLerp);
             }
             yield return null;
         }
     }
 
-    IEnumerator LerpFloat(ArrayList floatParameterInfo)
+    IEnumerator LerpFloat(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
-        float floatElapsed = 0f;
+        float elapsed = 0f;
 
-        // Choose a duration for this lerp to take place
-        float duration = 0.5f + Random.value * 1f;
-        string parameterName = (string)floatParameterInfo[1];
+        string parameterName = (string)parameterInfo[1];
 
-        // Set the target float value based on parameters
-        float targetFloat = (float)floatParameterInfo[2] + Random.value * ((float)floatParameterInfo[3] - (float)floatParameterInfo[2]);
+        // Set the target float value based on m_Parameters
+        float targetFloat = (float)parameterInfo[2] + Random.value * ((float)parameterInfo[3] - (float)parameterInfo[2]);
 
         // Obtain the getter and setter methods for the float property to lerp
-        MethodInfo getter = selection.GetType().GetProperty(parameterName).GetGetMethod();
-        MethodInfo setter = selection.GetType().GetProperty(parameterName).GetSetMethod();
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
-        float startFloat = (float) getter.Invoke(selection, null);
+        float startFloat = (float)getter.Invoke(m_Selection, null);
 
-        Debug.Log("Start: " + targetFloat);
-
-        parameterText.text = selection.GetType() + " " + selection.name + " " + selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
+        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
 
         // Loop while the time has not yet elapsed
-        while (floatElapsed < duration)
+        while (elapsed < m_CurrentLerpTime)
         {
             // Track how much time passed in this loop
-            floatElapsed += Time.deltaTime;
+            elapsed += Time.deltaTime;
 
             // Calculate the required interpolation amount
-            float t = floatElapsed / duration;
+            float t = elapsed / m_CurrentLerpTime;
 
             // Calculate the new value of the float required through interpolation
             float newFloat = Mathf.Lerp(startFloat, targetFloat, t);
 
             // Set the new value of the float parameter
 
-            setter.Invoke(selection, new object[] { newFloat });
+            setter.Invoke(m_Selection, new object[] { newFloat });
 
-            parameterText.text = selection.GetType() + " " + selection.name + " " + selection.GetInstanceID() + "\n" + parameterName + ": " + newFloat;
-
-            Debug.Log("elapsed: " + floatElapsed + ", t: " + t + ", new: " + newFloat);
+            m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newFloat;
 
             // Yield until the next frame
             yield return null;
         }
 
-        lerpComplete = true;
+        m_LerpComplete = true;
     }
 
 
-    void TestReflectionFunctions()
+    IEnumerator LerpColor(ArrayList parameterInfo)
     {
-        // This gets the color property out as a color
-        Color c = (Color)selection.GetType().GetProperty("color").GetValue(selection, null);
-        Debug.Log(c);
+        // Set elapsed time to 0
+        float elapsed = 0f;
 
-        // This pulls the setter method information
-        MethodInfo setter = selection.GetType().GetProperty("color").GetSetMethod();
+        string parameterName = (string)parameterInfo[1];
 
-        MethodInfo getter = selection.GetType().GetProperty("color").GetGetMethod();
+        // Set the target float value based on m_Parameters
+        Color targetColor = Random.ColorHSV();
 
-        // This involves the set method
-        setter.Invoke(selection, new object[] { new Color(1000, 0, 0) });
+        // Obtain the getter and setter methods for the float property to lerp
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
-        Color got = (Color)getter.Invoke(selection, null);
-        Debug.Log(got);
+        // Get the current value of the parameter
+        Color startColor = (Color)getter.Invoke(m_Selection, null);
 
-        // This works to set the color property via creating a new Color
-        //selection.GetType().GetProperty("color").SetValue(selection, new Color(0.5f,0f,0f), null);
+        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startColor;
 
-        // This will print out a pretty specific identification of the particular instance
-        Debug.Log(selection.GetType() + ", name: " + selection.name + ", id: " + selection.GetInstanceID());
-    }
-
-    IEnumerator RandomizeLerp()
-    {
-        SetTargets();
-
-        while (true)
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
         {
+            // Track how much time passed in this loop
             elapsed += Time.deltaTime;
-            float t = elapsed / m_Interval;
-            Debug.Log(t);
 
-            transform.rotation = Quaternion.Lerp(m_OriginalRotation, m_TargetRotation, t);
-            selection.color = Color.Lerp(selection.color, m_TargetColor, t);
-            selection.intensity = Mathf.Lerp(selection.intensity, m_TargetIntensity, t);
-            selection.shadowStrength = Mathf.Lerp(selection.shadowStrength, m_TargetShadowStrength, t);
-            selection.shadowBias = Mathf.Lerp(selection.shadowBias, m_TargetShadowBias, t);
-            selection.shadowNormalBias = Mathf.Lerp(selection.shadowNormalBias, m_TargetShadowNormalBias, t);
-            selection.shadowNearPlane = Mathf.Lerp(selection.shadowNearPlane, m_TargetShadowNearPlane, t);
+            // Calculate the required interpolation amount
+            float t = elapsed / m_CurrentLerpTime;
 
-            if (elapsed >= m_Interval) {
-                elapsed = 0f;
-                SetTargets();
-            }
+            // Calculate the new value of the float required through interpolation
+            Color newColor = Color.Lerp(startColor, targetColor, t);
 
-            //if (Vector3.Distance(transform.rotation.eulerAngles,m_TargetRotation.eulerAngles) < 0.1f) {
-            //    SetTargets();
-            //}
+            // Set the new value of the float parameter
 
+            setter.Invoke(m_Selection, new object[] { newColor });
+
+            m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newColor;
+
+            // Yield until the next frame
             yield return null;
         }
+
+        m_LerpComplete = true;
     }
 
-    private void SetTargets()
-    {
-        m_OriginalRotation = transform.rotation;
-        m_TargetRotation = Random.rotation;
-        m_TargetColor = Random.ColorHSV();
-        m_TargetIntensity = Random.value * 50f;
-        m_TargetShadowStrength = Random.value;
-        m_TargetShadowBias = Random.value * 2f;
-        m_TargetShadowNormalBias = Random.value * 3f;
-        m_TargetShadowNearPlane = Random.value * 10f;
-    }
 
-    IEnumerator RandomizeInterval()
+    IEnumerator LerpEnum(ArrayList parameterInfo)
     {
-        while (true)
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        string target = (string)parameterInfo[2 + Mathf.FloorToInt(Random.value * (parameterInfo.Count - 2))];
+
+        // Obtain the getter and setter methods for the float property to lerp
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
         {
-            SetTargets();
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
 
-            transform.rotation = m_TargetRotation;
+            if (elapsed >= m_CurrentLerpTime/2)
+            {
+                setter.Invoke(m_Selection, new object[] { parameterInfo.IndexOf(target) - 2 });
+            }
 
-            selection.color = m_TargetColor;
 
-            selection.intensity = m_TargetIntensity;
 
-            float r = Random.value;
-            if (r < 0.33) selection.shadows = LightShadows.Hard;
-            else if (r < 0.66) selection.shadows = LightShadows.Soft;
-            else selection.shadows = LightShadows.None;
+            m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
 
-            selection.shadowStrength = m_TargetShadowStrength;
-
-            selection.shadowBias = m_TargetShadowBias;
-
-            selection.shadowNormalBias = m_TargetShadowNormalBias;
-
-            selection.shadowNearPlane = m_TargetShadowNearPlane;
-
-            //selection.cookie = allTextures[Mathf.FloorToInt(Random.value * allTextures.Length)];
-            //selection.cookieSize = Random.value * 100f;
-
-            yield return new WaitForSeconds(m_Interval);
+            // Yield until the next frame
+            yield return null;
         }
+
+        m_LerpComplete = true;
+    }
+
+
+
+    IEnumerator LerpRotation(ArrayList parameterInfo)
+    {
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        // Set the target float value based on m_Parameters
+        Quaternion targetRotation = Random.rotation;
+
+        // Obtain the getter and setter methods for the float property to lerp
+        MethodInfo getter = m_Selection.transform.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.transform.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Quaternion startRotation = (Quaternion)getter.Invoke(m_Selection.transform, null);
+
+        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            // Calculate the required interpolation amount
+            float t = elapsed / m_CurrentLerpTime;
+
+            // Calculate the new value of the float required through interpolation
+            Quaternion newRotation = Quaternion.Lerp(startRotation, targetRotation, t);
+
+            // Set the new value of the float parameter
+
+            setter.Invoke(m_Selection.transform, new object[] { newRotation });
+
+            m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
     }
 }
