@@ -1,53 +1,35 @@
 ﻿using System.Collections;
-//using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using System;
 using System.Reflection;
 
-public class DirectionalLightScript : MonoBehaviour {
+public class ParameterLerper : MonoBehaviour {
 
-    public Text m_ParameterText;
+    //public Text m_ParameterText;
     public float m_MinimumLerpTime = 1f;
     public float m_MaximumLerpTime = 2f;
-    public Texture[] allTextures;
 
-    private Light m_Selection;
-    private string m_CurrentParameterName;
-    private float m_CurrentLerpTime;
-    private bool m_LerpComplete = true;
+    protected Light m_Selection;
 
-    private ArrayList[] m_Parameters = {
-        new ArrayList(new object[]{ "LerpEnum", "shadows", "LightShadows.None","LightShadows.Soft","LightShadows.Hard" }),
-        new ArrayList(new object[]{ "LerpEnum", "renderMode", "LightRenderMode.Auto","LightRenderMode.ForcePixel","LightRenderMode.ForceVertex" }),
-        new ArrayList(new object[]{ "LerpRotation", "rotation" }),
-        new ArrayList(new object[]{ "LerpColor", "color" }),
-        new ArrayList(new object[]{ "LerpFloat", "intensity", 0f, 2f }),
-        new ArrayList(new object[]{ "LerpFloat", "shadowStrength", 0f, 1f }),
-        new ArrayList(new object[]{ "LerpFloat", "shadowBias", 0f, 2f }),
-        new ArrayList(new object[]{ "LerpFloat", "shadowNormalBias", 0f, 3f }),
-        new ArrayList(new object[]{ "LerpFloat", "shadowNearPlane", 0f, 10f }),
-    };
+    protected string m_CurrentParameterName;
+    protected float m_CurrentLerpTime;
+    protected bool m_LerpComplete = true;
 
+    protected ArrayList m_Parameters;
 
-
-
-	// Use this for initialization
-	void Start () {
-        Light[] lights = FindObjectsOfType<Light>();
-        m_Selection = lights[Mathf.FloorToInt(Random.value * lights.Length)];
-        StartCoroutine(StartLerps());
+    protected virtual void Start()
+    {
+        m_Parameters = new ArrayList();
     }
-	
 
-    IEnumerator StartLerps()
+    public IEnumerator StartLerps()
     {
         while (true)
         {
             if (m_LerpComplete)
             {
                 m_LerpComplete = false;
-                ArrayList parameterToLerp = m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Length)];
+                ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
                 m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
                 StartCoroutine((string)parameterToLerp[0], parameterToLerp);
             }
@@ -72,7 +54,7 @@ public class DirectionalLightScript : MonoBehaviour {
         // Get the current value of the parameter
         float startFloat = (float)getter.Invoke(m_Selection, null);
 
-        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
 
         // Loop while the time has not yet elapsed
         while (elapsed < m_CurrentLerpTime)
@@ -90,7 +72,7 @@ public class DirectionalLightScript : MonoBehaviour {
 
             setter.Invoke(m_Selection, new object[] { newFloat });
 
-            m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newFloat;
+            //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newFloat;
 
             // Yield until the next frame
             yield return null;
@@ -117,7 +99,7 @@ public class DirectionalLightScript : MonoBehaviour {
         // Get the current value of the parameter
         Color startColor = (Color)getter.Invoke(m_Selection, null);
 
-        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startColor;
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startColor;
 
         // Loop while the time has not yet elapsed
         while (elapsed < m_CurrentLerpTime)
@@ -135,7 +117,7 @@ public class DirectionalLightScript : MonoBehaviour {
 
             setter.Invoke(m_Selection, new object[] { newColor });
 
-            m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newColor;
+            //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newColor;
 
             // Yield until the next frame
             yield return null;
@@ -158,7 +140,7 @@ public class DirectionalLightScript : MonoBehaviour {
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
-        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
 
         // Loop while the time has not yet elapsed
         while (elapsed < m_CurrentLerpTime)
@@ -173,7 +155,7 @@ public class DirectionalLightScript : MonoBehaviour {
 
 
 
-            m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
+            //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
 
             // Yield until the next frame
             yield return null;
@@ -201,7 +183,7 @@ public class DirectionalLightScript : MonoBehaviour {
         // Get the current value of the parameter
         Quaternion startRotation = (Quaternion)getter.Invoke(m_Selection.transform, null);
 
-        m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
 
         // Loop while the time has not yet elapsed
         while (elapsed < m_CurrentLerpTime)
@@ -219,7 +201,52 @@ public class DirectionalLightScript : MonoBehaviour {
 
             setter.Invoke(m_Selection.transform, new object[] { newRotation });
 
-            m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+
+    IEnumerator LerpPosition(ArrayList parameterInfo)
+    {
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        // Set the target float value based on m_Parameters
+        Vector3 target = Random.onUnitSphere * 10f;
+
+        // Obtain the getter and setter methods for the float property to lerp
+        MethodInfo getter = m_Selection.transform.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.transform.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Vector3 startPosition = (Vector3)getter.Invoke(m_Selection.transform, null);
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            // Calculate the required interpolation amount
+            float t = elapsed / m_CurrentLerpTime;
+
+            // Calculate the new value of the float required through interpolation
+            Vector3 newPosition = Vector3.Lerp(startPosition, target, t);
+
+            // Set the new value of the float parameter
+
+            setter.Invoke(m_Selection.transform, new object[] { newPosition });
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
 
             // Yield until the next frame
             yield return null;
