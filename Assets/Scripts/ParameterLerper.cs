@@ -31,7 +31,11 @@ public class ParameterLerper : MonoBehaviour {
                 m_LerpComplete = false;
                 ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
                 m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
-                StartCoroutine((string)parameterToLerp[0], parameterToLerp);
+                for (int i = 0; i < m_Parameters.Count; i++)
+                {
+                    parameterToLerp = (ArrayList)m_Parameters[i];
+                    StartCoroutine((string)parameterToLerp[0], parameterToLerp);
+                }
             }
             yield return null;
         }
@@ -163,7 +167,6 @@ public class ParameterLerper : MonoBehaviour {
 
         m_LerpComplete = true;
     }
-
 
 
     IEnumerator LerpRotation(ArrayList parameterInfo)
