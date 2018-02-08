@@ -1481,7 +1481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &257303972
 Transform:
   m_ObjectHideFlags: 0
@@ -1506,8 +1506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80f08c918e1449719a896f26d68d3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinimumLerpTime: 1
-  m_MaximumLerpTime: 5
+  m_MinimumLerpTime: 0.25
+  m_MaximumLerpTime: 0.5
 --- !u!108 &257303974
 Light:
   m_ObjectHideFlags: 0
@@ -7245,6 +7245,7 @@ GameObject:
   - component: {fileID: 1304999366}
   - component: {fileID: 1304999367}
   - component: {fileID: 1304999365}
+  - component: {fileID: 1304999368}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7398,6 +7399,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &1304999368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1304999364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d249c95dc477489c9b1d5f5e14fee08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinimumLerpTime: 1
+  m_MaximumLerpTime: 2
+  clips:
+  - {fileID: 8300000, guid: 8ce5d020a687c314891341b4126d1de2, type: 3}
+  - {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
+  - {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
+  - {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
+  - {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
+  - {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  - {fileID: 8300000, guid: 5c27182a28a7eb942a362e6d198fe0e6, type: 3}
 --- !u!1 &1347904825
 GameObject:
   m_ObjectHideFlags: 0
