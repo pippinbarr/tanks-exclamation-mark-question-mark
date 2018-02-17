@@ -11,9 +11,10 @@ public class LerpManager : MonoBehaviour
     public Text m_Output;
     public AudioClip[] m_AudioClips;
 
-    private GameObject m_Selected;
+    private GameObject m_SelectedGameObject;
+    private Component m_SelectedComponent;
+
     private MeshRenderer m_SelectedRenderer;
-    private bool lerping = false;
     private RenderBoundingBox m_RenderBoundingBox;
 
 
@@ -22,57 +23,91 @@ public class LerpManager : MonoBehaviour
     {
         m_RenderBoundingBox = GetComponent<RenderBoundingBox>();
         StartCoroutine(DoLerping());
+        StartCoroutine(UpdateUI());
     }
 
     IEnumerator DoLerping()
     {
-        Debug.Log("DoLerping()");
-        // Get every GameObject
-        Component[] all = FindObjectsOfType<AudioSource>();
-        //GameObject[] all = GameObject.FindGameObjectsWithTag("AudioSource");
-
-        // Choose one
-        Component selection = all[Mathf.FloorToInt(Random.value * all.Length)];
-        m_Selected = selection.gameObject;
-
-        // Get its renderer (may or may not actually have one)
-        m_SelectedRenderer = m_Selected.GetComponent<MeshRenderer>();
-
-        // Get all relevant components
-        //Light[] lights = m_Selected.GetComponents<Light>();
-        AudioSource[] audioSources = m_Selected.GetComponents<AudioSource>();
-
-        if (audioSources.Length != 0)
-        {
-            Debug.Log("Adding AudioSourceLerper");
-            AudioSourceLerper lerper = m_Selected.AddComponent<AudioSourceLerper>();
-            lerper.m_Selection = audioSources[0];
-            lerper.m_AudioClips = m_AudioClips;
-        }
-
+        ParameterLerper lerper = null;
 
         while (true)
         {
-            
-            SetUI();
+            if (lerper == null || lerper.m_LerpComplete)
+            {
+                if (m_SelectedGameObject != null)
+                {
+                    Destroy(m_SelectedGameObject.GetComponent<ParameterLerper>());
+                }
+
+
+                // Get every GameObject
+                Component[] audioSources = FindObjectsOfType<AudioSource>();
+                Component[] lights = FindObjectsOfType<Light>();
+                Component[] cameras = FindObjectsOfType<Camera>();
+
+                Component[] selectedCategory;
+
+                float r = Random.value;
+                r = 0.7f;
+                if (r < 0.33f)
+                {
+                    Debug.Log("Lerping an AudioSource");
+                    selectedCategory = audioSources;
+                }
+                else if (r < 0.66f)
+                {
+                    Debug.Log("Lerping a Light");
+                    selectedCategory = lights;
+                }
+                else
+                {
+                    Debug.Log("Lerping a Camera");
+                    selectedCategory = cameras;
+                }
+
+                Component selection = selectedCategory[Mathf.FloorToInt(Random.value * selectedCategory.Length)];
+                m_SelectedGameObject = selection.gameObject;
+                m_SelectedRenderer = m_SelectedGameObject.GetComponent<MeshRenderer>();
+
+
+                if (selectedCategory == audioSources)
+                {
+                    lerper = m_SelectedGameObject.AddComponent<AudioSourceLerper>();
+                    lerper.m_Selection = selection;
+                    lerper.m_AudioClips = m_AudioClips;
+                }
+                else if (selectedCategory == lights)
+                {
+                    lerper = m_SelectedGameObject.AddComponent<LightLerper>();
+                    lerper.m_Selection = selection;
+                }
+                else if (selectedCategory == cameras)
+                {
+                    lerper = m_SelectedGameObject.AddComponent<CameraLerper>();
+                    lerper.m_Selection = selection;
+                }
+            }
 
             yield return null;
         }
-
     }
 
-    void SetUI ()
+    IEnumerator UpdateUI()
     {
-        Vector3 extents = new Vector3(1, 1, 1);
-        Vector3 center = m_Selected.transform.position;
-        if (m_SelectedRenderer != null)
+        while (true)
         {
-            extents = m_SelectedRenderer.bounds.extents;
-            center = m_SelectedRenderer.bounds.center;
-        }
-        m_RenderBoundingBox.bounds = new Bounds(Vector3.zero, extents * 2);
-        transform.SetPositionAndRotation(center, transform.rotation);
-        m_Output.text = m_Selected.name;
+            Vector3 extents = new Vector3(1, 1, 1);
+            Vector3 center = m_SelectedGameObject.transform.position;
+            if (m_SelectedRenderer != null)
+            {
+                extents = m_SelectedRenderer.bounds.extents;
+                center = m_SelectedRenderer.bounds.center;
+            }
+            m_RenderBoundingBox.bounds = new Bounds(Vector3.zero, extents * 2);
+            transform.SetPositionAndRotation(center, transform.rotation);
+            m_Output.text = m_SelectedGameObject.name;
 
+            yield return null;
+        }
     }
 }

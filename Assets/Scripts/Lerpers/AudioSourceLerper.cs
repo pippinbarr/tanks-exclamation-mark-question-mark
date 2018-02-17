@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class AudioSourceLerper : ParameterLerper {
 
-    public AudioClip[] m_AudioClips;
-
 	// Use this for initialization
 	protected override void Start () {
-        Debug.Log("AudioSourceLerper Start");
         base.Start();
 
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "mute" }));
@@ -19,8 +16,8 @@ public class AudioSourceLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpAudioClip", "clip", m_AudioClips }));
 
         m_Selection = GetComponent<AudioSource>();
+        type = "AudioSourceLerper";
 
-        Debug.Log("Starting lerp...");
         StartCoroutine(StartLerp());
     }
 	
