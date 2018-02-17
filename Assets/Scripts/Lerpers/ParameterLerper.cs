@@ -3,39 +3,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Reflection;
 
-public class ParameterLerper : MonoBehaviour {
+public class ParameterLerper : MonoBehaviour
+{
 
     //public Text m_ParameterText;
     public float m_MinimumLerpTime = 1f;
     public float m_MaximumLerpTime = 2f;
+    public bool m_LerpComplete = true;
 
     //protected Light m_Selection;
-    protected AudioSource m_Selection;
+    public AudioSource m_Selection;
 
     protected string m_CurrentParameterName;
     protected float m_CurrentLerpTime;
-    protected bool m_LerpComplete = true;
 
     protected ArrayList m_Parameters;
 
+    private bool m_Bounce = false;
+
     protected virtual void Start()
     {
+        Debug.Log("ParameterLerper Start()");
         m_Parameters = new ArrayList();
+        m_LerpComplete = false;
     }
 
-    public virtual IEnumerator StartLerps()
+    public virtual IEnumerator StartLerp()
     {
-        while (true)
-        {
-            if (m_LerpComplete)
-            {
-                m_LerpComplete = false;
-                ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
-                m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
-                StartCoroutine((string)parameterToLerp[0], parameterToLerp);
-            }
-            yield return null;
-        }
+
+        ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
+        Debug.Log(parameterToLerp[0]);
+        m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
+        StartCoroutine((string)parameterToLerp[0], parameterToLerp);
+
+        yield return null;
     }
 
 
@@ -80,7 +81,8 @@ public class ParameterLerper : MonoBehaviour {
             setter.Invoke(m_Selection, new object[] { next });
 
 
-            if (elapsed >= m_CurrentLerpTime && !lerpingBack) {
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
                 elapsed = 0;
                 target = start;
                 start = next;
@@ -134,7 +136,7 @@ public class ParameterLerper : MonoBehaviour {
 
             setter.Invoke(m_Selection, new object[] { next });
 
-            if (elapsed >= m_CurrentLerpTime && !lerpingBack)
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
                 elapsed = 0;
                 target = start;
@@ -163,7 +165,7 @@ public class ParameterLerper : MonoBehaviour {
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         string value = getter.Invoke(m_Selection, null).ToString();
-        string enumName = (string)getter.Invoke(m_Selection,null).GetType().Name;
+        string enumName = (string)getter.Invoke(m_Selection, null).GetType().Name;
         string start = enumName + "." + value;
 
         object target = parameterInfo[2 + Mathf.FloorToInt(Random.value * (parameterInfo.Count - 2))];
@@ -178,12 +180,12 @@ public class ParameterLerper : MonoBehaviour {
             // Track how much time passed in this loop
             elapsed += Time.deltaTime;
 
-            if (elapsed >= m_CurrentLerpTime/2)
+            if (elapsed >= m_CurrentLerpTime / 2)
             {
                 setter.Invoke(m_Selection, new object[] { parameterInfo.IndexOf(target) - 2 });
             }
 
-            if (elapsed >= m_CurrentLerpTime && !lerpingBack)
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
                 elapsed = 0;
                 target = start;
@@ -200,7 +202,7 @@ public class ParameterLerper : MonoBehaviour {
     }
 
 
-   
+
     IEnumerator LerpBool(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -212,7 +214,7 @@ public class ParameterLerper : MonoBehaviour {
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
-        bool start = (bool)getter.Invoke(m_Selection,null);
+        bool start = (bool)getter.Invoke(m_Selection, null);
 
         bool target = !start;
 
@@ -231,7 +233,7 @@ public class ParameterLerper : MonoBehaviour {
                 setter.Invoke(m_Selection, new object[] { target });
             }
 
-            if (elapsed >= m_CurrentLerpTime && !lerpingBack)
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
                 elapsed = 0;
                 target = start;
@@ -257,8 +259,8 @@ public class ParameterLerper : MonoBehaviour {
         string parameterName = (string)parameterInfo[1];
 
         // Set the target float value based on m_Parameters
-        AudioClip[] clips = (AudioClip[])parameterInfo[2];
-        AudioClip target = clips[Mathf.FloorToInt(Random.value * clips.Length)];
+        AudioClip[] audioClips = (AudioClip[])parameterInfo[2];
+        AudioClip target = audioClips[Mathf.FloorToInt(Random.value * audioClips.Length)];
 
         // Obtain the getter and setter methods for the float property to lerp
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
@@ -286,7 +288,7 @@ public class ParameterLerper : MonoBehaviour {
                 lerpingForward = false;
             }
 
-            if (elapsed >= m_CurrentLerpTime && !lerpingBack)
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
                 elapsed = 0;
                 target = start;

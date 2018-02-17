@@ -21,8 +21,6 @@ public class SpotLightLerper : ParameterLerper {
         //m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "shadowNormalBias", 0f, 3f }));
         //m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "shadowNearPlane", 0f, 10f }));
 
-        //m_Selection = GetComponent<Light>();
-
         //StartCoroutine(StartLerps());
     }
 }
