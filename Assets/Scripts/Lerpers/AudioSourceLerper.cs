@@ -16,7 +16,7 @@ public class AudioSourceLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpAudioClip", "clip", m_AudioClips }));
 
         m_Selection = GetComponent<AudioSource>();
-        type = "AudioSourceLerper";
+        type = "AudioSource";
 
         StartCoroutine(StartLerp());
     }

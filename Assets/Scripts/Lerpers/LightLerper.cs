@@ -21,10 +21,7 @@ public class LightLerper : ParameterLerper {
 
         // Specialised parameters depending on type of light
         Light selectionAsLight = (Light)m_Selection;
-        if (selectionAsLight.type != LightType.Point)
-        {
-            m_Parameters.Add(new ArrayList(new object[] { "LerpRotation", "rotation" }));
-        }
+
         if (selectionAsLight.type == LightType.Spot)
         {
             m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "range", 0f, 1000f }));
@@ -35,7 +32,7 @@ public class LightLerper : ParameterLerper {
             m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "range", 0f, 1000f }));
         }
 
-        type = "LightLerper";
+        type = "Light";
 
 
         StartCoroutine(StartLerp());

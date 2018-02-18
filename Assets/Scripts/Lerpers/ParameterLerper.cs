@@ -34,8 +34,18 @@ public class ParameterLerper : MonoBehaviour
     {
 
         ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
-        m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
-        StartCoroutine((string)parameterToLerp[0], parameterToLerp);
+        string parameterName = (string)parameterToLerp[1];
+        PropertyInfo pInfo = m_Selection.GetType().GetProperty(parameterName);
+        if (pInfo != null)
+        {
+
+            Debug.Log("Parameter: " + parameterToLerp[1]);
+
+            LerpManager.output.text = m_Selection.name + ":" + type + ":" + parameterToLerp[1];
+
+            m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
+            StartCoroutine((string)parameterToLerp[0], parameterToLerp);
+        }
 
         yield return null;
     }
@@ -50,13 +60,17 @@ public class ParameterLerper : MonoBehaviour
 
         string parameterName = (string)parameterInfo[1];
 
-
-        // Obtain the getter and setter methods for the float property to lerp
-        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
-        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
-
         // Set the target float value based on m_Parameters
         float target = (float)parameterInfo[2] + Random.value * ((float)parameterInfo[3] - (float)parameterInfo[2]);
+
+        Debug.Log("Parameter: " + parameterName);
+        Debug.Log("Target: " + target);
+
+        // Obtain the getter and setter methods for the float property to lerp
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
         float start = (float)getter.Invoke(m_Selection, null);
@@ -111,6 +125,7 @@ public class ParameterLerper : MonoBehaviour
         Color target = Random.ColorHSV();
 
         // Obtain the getter and setter methods for the float property to lerp
+
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
@@ -163,6 +178,7 @@ public class ParameterLerper : MonoBehaviour
         string parameterName = (string)parameterInfo[1];
 
         // Obtain the getter and setter methods for the float property to lerp
+
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
@@ -215,12 +231,16 @@ public class ParameterLerper : MonoBehaviour
         string parameterName = (string)parameterInfo[1];
 
         // Obtain the getter and setter methods for the float property to lerp
+
+
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         bool start = (bool)getter.Invoke(m_Selection, null);
 
         bool target = !start;
+
+        Debug.Log("Target: " + target);
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
 
@@ -267,8 +287,9 @@ public class ParameterLerper : MonoBehaviour
         AudioClip[] audioClips = (AudioClip[])parameterInfo[2];
         AudioClip target = audioClips[Mathf.FloorToInt(Random.value * audioClips.Length)];
 
-        // Obtain the getter and setter methods for the float property to lerp
-        MethodInfo getter = selectionAsAudioSource.GetType().GetProperty(parameterName).GetGetMethod();
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = selectionAsAudioSource.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
@@ -319,14 +340,16 @@ public class ParameterLerper : MonoBehaviour
         string parameterName = (string)parameterInfo[1];
 
         // Set the target float value based on m_Parameters
-        Vector3 target = Random.onUnitSphere * 10f;
+        Vector3 target = Random.onUnitSphere * 1f;
 
         // Obtain the getter and setter methods for the float property to lerp
-        MethodInfo getter = m_Selection.gameObject.transform.GetType().GetProperty(parameterName).GetGetMethod();
-        MethodInfo setter = m_Selection.gameObject.transform.GetType().GetProperty(parameterName).GetSetMethod();
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
-        Vector3 start = (Vector3)getter.Invoke(m_Selection.gameObject.transform, null);
+        Vector3 start = (Vector3)getter.Invoke(m_Selection, null);
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
 
@@ -346,7 +369,7 @@ public class ParameterLerper : MonoBehaviour
 
             // Set the new value of the float parameter
 
-            setter.Invoke(m_Selection.gameObject.transform, new object[] { next });
+            setter.Invoke(m_Selection, new object[] { next });
 
             if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
@@ -365,6 +388,64 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
+
+    IEnumerator LerpScale(ArrayList parameterInfo)
+    {
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        // Set the target float value based on m_Parameters
+        Vector3 target = Random.onUnitSphere * 2f;
+
+        // Obtain the getter and setter methods for the float property to lerp
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Vector3 start = (Vector3)getter.Invoke(m_Selection, null);
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            // Calculate the required interpolation amount
+            float t = elapsed / m_CurrentLerpTime;
+
+            // Calculate the new value of the float required through interpolation
+            Vector3 next = Vector3.Lerp(start, target, t);
+
+            // Set the new value of the float parameter
+
+            setter.Invoke(m_Selection, new object[] { next });
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                start = next;
+                lerpingBack = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+
     IEnumerator LerpRotation(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -376,11 +457,13 @@ public class ParameterLerper : MonoBehaviour
         Quaternion target = Random.rotation;
 
         // Obtain the getter and setter methods for the float property to lerp
-        MethodInfo getter = m_Selection.gameObject.transform.GetType().GetProperty(parameterName).GetGetMethod();
-        MethodInfo setter = m_Selection.gameObject.transform.GetType().GetProperty(parameterName).GetSetMethod();
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
-        Quaternion start = (Quaternion)getter.Invoke(m_Selection.gameObject.transform, null);
+        Quaternion start = (Quaternion)getter.Invoke(m_Selection, null);
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
 
@@ -400,7 +483,7 @@ public class ParameterLerper : MonoBehaviour
 
             // Set the new value of the float parameter
 
-            setter.Invoke(m_Selection.gameObject.transform, new object[] { next });
+            setter.Invoke(m_Selection, new object[] { next });
 
             if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
@@ -431,6 +514,8 @@ public class ParameterLerper : MonoBehaviour
         Rect target = new Rect(Random.value, Random.value, Random.value, Random.value);
 
         // Obtain the getter and setter methods for the float property to lerp
+
+
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
@@ -456,7 +541,7 @@ public class ParameterLerper : MonoBehaviour
                 Mathf.Lerp(start.y, target.y, t),
                 Mathf.Lerp(start.width, target.width, t),
                 Mathf.Lerp(start.height, target.height, t));
-                
+
 
             // Set the new value of the float parameter
 

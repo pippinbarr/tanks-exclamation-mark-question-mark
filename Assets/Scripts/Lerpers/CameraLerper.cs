@@ -20,7 +20,7 @@ public class CameraLerper : ParameterLerper {
         m_Selection = GetComponent<Camera>();
         //Camera cam = (Camera)m_Selection;
 
-        type = "CameraLerper";
+        type = "Camera";
 
         StartCoroutine(StartLerp());
     }

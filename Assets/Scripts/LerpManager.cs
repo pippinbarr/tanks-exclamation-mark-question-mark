@@ -9,6 +9,8 @@ public class LerpManager : MonoBehaviour
 
 
     public Text m_Output;
+    public static Text output;
+
     public AudioClip[] m_AudioClips;
 
     private GameObject m_SelectedGameObject;
@@ -22,6 +24,8 @@ public class LerpManager : MonoBehaviour
     void Start()
     {
         m_RenderBoundingBox = GetComponent<RenderBoundingBox>();
+        output = m_Output;
+
         StartCoroutine(DoLerping());
         StartCoroutine(UpdateUI());
     }
@@ -44,48 +48,41 @@ public class LerpManager : MonoBehaviour
                 Component[] audioSources = FindObjectsOfType<AudioSource>();
                 Component[] lights = FindObjectsOfType<Light>();
                 Component[] cameras = FindObjectsOfType<Camera>();
+                Component[] transforms = FindObjectsOfType<Transform>();
 
-                Component[] selectedCategory;
+                //Component[][] categories = { audioSources, lights, cameras, transforms };
+                Component[][] categories = { transforms };
 
-                float r = Random.value;
-                r = 0.7f;
-                if (r < 0.33f)
-                {
-                    Debug.Log("Lerping an AudioSource");
-                    selectedCategory = audioSources;
-                }
-                else if (r < 0.66f)
-                {
-                    Debug.Log("Lerping a Light");
-                    selectedCategory = lights;
-                }
-                else
-                {
-                    Debug.Log("Lerping a Camera");
-                    selectedCategory = cameras;
-                }
+                Component[] selectedCategory = categories[Mathf.FloorToInt(Random.value * categories.Length)];
 
                 Component selection = selectedCategory[Mathf.FloorToInt(Random.value * selectedCategory.Length)];
                 m_SelectedGameObject = selection.gameObject;
                 m_SelectedRenderer = m_SelectedGameObject.GetComponent<MeshRenderer>();
 
 
+
                 if (selectedCategory == audioSources)
                 {
+                    Debug.Log("Selected AudioSource...");
                     lerper = m_SelectedGameObject.AddComponent<AudioSourceLerper>();
-                    lerper.m_Selection = selection;
                     lerper.m_AudioClips = m_AudioClips;
                 }
                 else if (selectedCategory == lights)
                 {
+                    Debug.Log("Selected Light...");
                     lerper = m_SelectedGameObject.AddComponent<LightLerper>();
-                    lerper.m_Selection = selection;
                 }
                 else if (selectedCategory == cameras)
                 {
+                    Debug.Log("Selected Camera...");
                     lerper = m_SelectedGameObject.AddComponent<CameraLerper>();
-                    lerper.m_Selection = selection;
                 }
+                else if (selectedCategory == transforms)
+                {
+                    Debug.Log("Selected Transform...");
+                    lerper = m_SelectedGameObject.AddComponent<TransformLerper>();
+                }
+                lerper.m_Selection = selection;
             }
 
             yield return null;
@@ -105,7 +102,7 @@ public class LerpManager : MonoBehaviour
             }
             m_RenderBoundingBox.bounds = new Bounds(Vector3.zero, extents * 2);
             transform.SetPositionAndRotation(center, transform.rotation);
-            m_Output.text = m_SelectedGameObject.name;
+            //m_Output.text = m_SelectedGameObject.name;
 
             yield return null;
         }
