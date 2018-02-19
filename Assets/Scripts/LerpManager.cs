@@ -13,6 +13,7 @@ public class LerpManager : MonoBehaviour
 
     public AudioClip[] m_AudioClips;
     public Mesh[] m_Meshes;
+    public Material[] m_Materials;
 
     private GameObject m_SelectedGameObject;
     private Component m_SelectedComponent;
@@ -37,7 +38,7 @@ public class LerpManager : MonoBehaviour
 
         while (true)
         {
-            if (lerper == null || lerper.m_LerpComplete)
+            if (lerper == null || lerper.m_LerpComplete || lerper.gameObject == null)
             {
                 if (m_SelectedGameObject != null)
                 {
@@ -51,16 +52,17 @@ public class LerpManager : MonoBehaviour
                 Component[] cameras = FindObjectsOfType<Camera>();
                 Component[] transforms = FindObjectsOfType<Transform>();
                 Component[] meshFilters = FindObjectsOfType<MeshFilter>();
+                Component[] meshRenderers = FindObjectsOfType<MeshRenderer>();
+                Component[] rigidbodies = FindObjectsOfType<Rigidbody>();
 
-                Component[][] categories = { audioSources, lights, cameras, transforms, meshFilters };
-                //Component[][] categories = { cameras };
+                Component[][] categories = { audioSources, lights, cameras, transforms, meshFilters, meshRenderers, rigidbodies };
+                //Component[][] categories = { meshRenderers };
 
                 Component[] selectedCategory = categories[Mathf.FloorToInt(Random.value * categories.Length)];
 
                 Component selection = selectedCategory[Mathf.FloorToInt(Random.value * selectedCategory.Length)];
                 m_SelectedGameObject = selection.gameObject;
                 m_SelectedRenderer = m_SelectedGameObject.GetComponent<MeshRenderer>();
-
 
 
                 if (selectedCategory == audioSources)
@@ -88,6 +90,18 @@ public class LerpManager : MonoBehaviour
                 {
                     Debug.Log("Selected MeshFilter...");
                     lerper = m_SelectedGameObject.AddComponent<MeshFilterLerper>();
+                    lerper.m_Meshes = m_Meshes;
+                }
+                else if (selectedCategory == meshRenderers)
+                {
+                    Debug.Log("Selected MeshRenderer...");
+                    lerper = m_SelectedGameObject.AddComponent<MeshRendererLerper>();
+                    lerper.m_Materials = m_Materials;
+                }
+                else if (selectedCategory == rigidbodies)
+                {
+                    Debug.Log("Selected Rigidbody...");
+                    lerper = m_SelectedGameObject.AddComponent<RigidbodyLerper>();
                     lerper.m_Meshes = m_Meshes;
                 }
                 lerper.m_Selection = selection;

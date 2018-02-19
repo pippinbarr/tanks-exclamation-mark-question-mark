@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Reflection;
+using UnityEngine.Rendering;
+
 
 public class ParameterLerper : MonoBehaviour
 {
@@ -21,8 +23,10 @@ public class ParameterLerper : MonoBehaviour
     protected ArrayList m_Parameters;
 
     private bool m_Bounce = false;
+
     public AudioClip[] m_AudioClips;
     public Mesh[] m_Meshes;
+    public Material[] m_Materials;
 
 
     protected virtual void Start()
@@ -31,20 +35,30 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = false;
     }
 
+    private void OnDisable()
+    {
+        m_LerpComplete = true;
+    }
+
     public virtual IEnumerator StartLerp()
     {
 
         ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
         string parameterName = (string)parameterToLerp[1];
+        //Debug.Log("Parameter: " + parameterToLerp[1]);
+
         PropertyInfo pInfo = m_Selection.GetType().GetProperty(parameterName);
         if (pInfo != null)
         {
-            Debug.Log("Parameter: " + parameterToLerp[1]);
-
             LerpManager.output.text = m_Selection.name + ":" + type + ":" + parameterToLerp[1];
 
             m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
             StartCoroutine((string)parameterToLerp[0], parameterToLerp);
+        }
+        else
+        {
+            //Debug.Log("Parameter doesn't exist.");
+            m_LerpComplete = true;
         }
 
         yield return null;
@@ -568,6 +582,64 @@ public class ParameterLerper : MonoBehaviour
 
             if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
             {
+                setter.Invoke(m_Selection, new object[] { target });
+                lerpingForward = false;
+            }
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                lerpingBack = true;
+                lerpingForward = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+    IEnumerator LerpMaterial(ArrayList parameterInfo)
+    {
+        //MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        //Material[] materials = (Mesh[])parameterInfo[2];
+        //Mesh target = meshes[Mathf.FloorToInt(Random.value * meshes.Length)];
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Material[] start = (Material[])getter.Invoke(m_Selection, null);
+        Material[] target = new Material[start.Length];
+        for (int i = 0; i < target.Length; i++)
+        {
+            target[i] = m_Materials[Mathf.FloorToInt(Random.value * m_Materials.Length)];
+        }
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+        bool lerpingForward = true;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+            {
+                
                 setter.Invoke(m_Selection, new object[] { target });
                 lerpingForward = false;
             }

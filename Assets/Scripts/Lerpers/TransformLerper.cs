@@ -13,8 +13,6 @@ public class TransformLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpVector3", "localScale", 0.5f, 1.0f }));
 
         m_Selection = GetComponent<Transform>();
-        Transform t = (Transform)m_Selection;
-
 
         type = "Transform";
 
