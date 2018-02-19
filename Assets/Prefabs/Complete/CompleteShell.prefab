@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5409530}
   - component: {fileID: 10833074}
   - component: {fileID: 11426614}
-  - component: {fileID: 114045084922889218}
   m_Layer: 0
   m_Name: CompleteShell
   m_TagString: PointLight
@@ -370,19 +369,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114045084922889218
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 192454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 872e1ddf27c4f45d1b6d529d91126478, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MinimumLerpTime: 0.1
-  m_MaximumLerpTime: 0.5
 --- !u!198 &198280443358216586
 ParticleSystem:
   m_ObjectHideFlags: 1

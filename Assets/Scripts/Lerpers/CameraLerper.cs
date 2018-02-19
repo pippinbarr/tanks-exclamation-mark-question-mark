@@ -15,7 +15,7 @@ public class CameraLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "fieldOfView", 1f, 179f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "nearClipPlane", 0f, 50f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "farClipPlane", 50f, 100f }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpRect", "rect", 0f, 1f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpRect", "rect", 0.1f, 0.25f }));
 
         m_Selection = GetComponent<Camera>();
         //Camera cam = (Camera)m_Selection;

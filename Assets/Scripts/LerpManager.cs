@@ -12,6 +12,7 @@ public class LerpManager : MonoBehaviour
     public static Text output;
 
     public AudioClip[] m_AudioClips;
+    public Mesh[] m_Meshes;
 
     private GameObject m_SelectedGameObject;
     private Component m_SelectedComponent;
@@ -49,9 +50,10 @@ public class LerpManager : MonoBehaviour
                 Component[] lights = FindObjectsOfType<Light>();
                 Component[] cameras = FindObjectsOfType<Camera>();
                 Component[] transforms = FindObjectsOfType<Transform>();
+                Component[] meshFilters = FindObjectsOfType<MeshFilter>();
 
-                //Component[][] categories = { audioSources, lights, cameras, transforms };
-                Component[][] categories = { transforms };
+                Component[][] categories = { audioSources, lights, cameras, transforms, meshFilters };
+                //Component[][] categories = { cameras };
 
                 Component[] selectedCategory = categories[Mathf.FloorToInt(Random.value * categories.Length)];
 
@@ -81,6 +83,12 @@ public class LerpManager : MonoBehaviour
                 {
                     Debug.Log("Selected Transform...");
                     lerper = m_SelectedGameObject.AddComponent<TransformLerper>();
+                }
+                else if (selectedCategory == meshFilters)
+                {
+                    Debug.Log("Selected MeshFilter...");
+                    lerper = m_SelectedGameObject.AddComponent<MeshFilterLerper>();
+                    lerper.m_Meshes = m_Meshes;
                 }
                 lerper.m_Selection = selection;
             }

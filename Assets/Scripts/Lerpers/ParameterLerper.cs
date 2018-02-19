@@ -22,6 +22,7 @@ public class ParameterLerper : MonoBehaviour
 
     private bool m_Bounce = false;
     public AudioClip[] m_AudioClips;
+    public Mesh[] m_Meshes;
 
 
     protected virtual void Start()
@@ -38,7 +39,6 @@ public class ParameterLerper : MonoBehaviour
         PropertyInfo pInfo = m_Selection.GetType().GetProperty(parameterName);
         if (pInfo != null)
         {
-
             Debug.Log("Parameter: " + parameterToLerp[1]);
 
             LerpManager.output.text = m_Selection.name + ":" + type + ":" + parameterToLerp[1];
@@ -332,119 +332,6 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
-    IEnumerator LerpPosition(ArrayList parameterInfo)
-    {
-        // Set elapsed time to 0
-        float elapsed = 0f;
-
-        string parameterName = (string)parameterInfo[1];
-
-        // Set the target float value based on m_Parameters
-        Vector3 target = Random.onUnitSphere * 1f;
-
-        // Obtain the getter and setter methods for the float property to lerp
-
-
-        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
-        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
-
-        // Get the current value of the parameter
-        Vector3 start = (Vector3)getter.Invoke(m_Selection, null);
-
-        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
-
-        bool lerpingBack = false;
-
-        // Loop while the time has not yet elapsed
-        while (elapsed < m_CurrentLerpTime)
-        {
-            // Track how much time passed in this loop
-            elapsed += Time.deltaTime;
-
-            // Calculate the required interpolation amount
-            float t = elapsed / m_CurrentLerpTime;
-
-            // Calculate the new value of the float required through interpolation
-            Vector3 next = Vector3.Lerp(start, target, t);
-
-            // Set the new value of the float parameter
-
-            setter.Invoke(m_Selection, new object[] { next });
-
-            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
-            {
-                elapsed = 0;
-                target = start;
-                start = next;
-                lerpingBack = true;
-            }
-
-            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
-
-            // Yield until the next frame
-            yield return null;
-        }
-
-        m_LerpComplete = true;
-    }
-
-
-    IEnumerator LerpScale(ArrayList parameterInfo)
-    {
-        // Set elapsed time to 0
-        float elapsed = 0f;
-
-        string parameterName = (string)parameterInfo[1];
-
-        // Set the target float value based on m_Parameters
-        Vector3 target = Random.onUnitSphere * 2f;
-
-        // Obtain the getter and setter methods for the float property to lerp
-
-
-        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
-        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
-
-        // Get the current value of the parameter
-        Vector3 start = (Vector3)getter.Invoke(m_Selection, null);
-
-        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
-
-        bool lerpingBack = false;
-
-        // Loop while the time has not yet elapsed
-        while (elapsed < m_CurrentLerpTime)
-        {
-            // Track how much time passed in this loop
-            elapsed += Time.deltaTime;
-
-            // Calculate the required interpolation amount
-            float t = elapsed / m_CurrentLerpTime;
-
-            // Calculate the new value of the float required through interpolation
-            Vector3 next = Vector3.Lerp(start, target, t);
-
-            // Set the new value of the float parameter
-
-            setter.Invoke(m_Selection, new object[] { next });
-
-            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
-            {
-                elapsed = 0;
-                target = start;
-                start = next;
-                lerpingBack = true;
-            }
-
-            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
-
-            // Yield until the next frame
-            yield return null;
-        }
-
-        m_LerpComplete = true;
-    }
-
 
     IEnumerator LerpRotation(ArrayList parameterInfo)
     {
@@ -453,17 +340,26 @@ public class ParameterLerper : MonoBehaviour
 
         string parameterName = (string)parameterInfo[1];
 
-        // Set the target float value based on m_Parameters
-        Quaternion target = Random.rotation;
 
         // Obtain the getter and setter methods for the float property to lerp
-
-
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
         Quaternion start = (Quaternion)getter.Invoke(m_Selection, null);
+
+        float negativeAmount = (float)parameterInfo[2];
+        float positiveAmount = (float)parameterInfo[3];
+
+        float newX = start.eulerAngles.x + (Random.value < 0.5f ? negativeAmount : positiveAmount);
+        float newY = start.eulerAngles.y + (Random.value < 0.5f ? negativeAmount : positiveAmount);
+        float newZ = start.eulerAngles.z + (Random.value < 0.5f ? negativeAmount : positiveAmount);
+
+        Debug.Log(m_Selection.name + ": " + start.eulerAngles.x + "," + start.eulerAngles.y + "," + start.eulerAngles.z + " > " + newX + "," + newY + "," + newZ);
+
+        // Set the target float value based on m_Parameters
+        Quaternion target = new Quaternion();
+        target.eulerAngles = new Vector3(newX, newY, newZ);
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
 
@@ -503,15 +399,82 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
+    IEnumerator LerpVector3(ArrayList parameterInfo)
+    {
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+        float min = (float)parameterInfo[2];
+        float max = (float)parameterInfo[3];
+        float amount = min + Random.value * (max - min);
+
+        // Obtain the getter and setter methods for the float property to lerp
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Vector3 start = (Vector3)getter.Invoke(m_Selection, null);
+
+        // Set the target float value based on m_Parameters
+        Vector3 target = new Vector3(start.x, start.y, start.z);
+        float r = Random.value;
+        if (r < 0.33) target.x += Random.value < 0.5f ? amount : -amount;
+        else if (r < 0.66) target.y += Random.value < 0.5f ? amount : -amount;
+        else target.z += Random.value < 0.5f ? amount : -amount;
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            // Calculate the required interpolation amount
+            float t = elapsed / m_CurrentLerpTime;
+
+            // Calculate the new value of the float required through interpolation
+            Vector3 next = Vector3.Lerp(start, target, t);
+
+            // Set the new value of the float parameter
+
+            setter.Invoke(m_Selection, new object[] { next });
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                start = next;
+                lerpingBack = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+
+
     IEnumerator LerpRect(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
         float elapsed = 0f;
 
         string parameterName = (string)parameterInfo[1];
+        float min = (float)parameterInfo[2];
+        float max = (float)parameterInfo[3];
+        float amount = min + Random.value * (max - min);
+        if (Random.value < 0.5f) amount = -amount;
 
-        // Set the target float value based on m_Parameters
-        Rect target = new Rect(Random.value, Random.value, Random.value, Random.value);
 
         // Obtain the getter and setter methods for the float property to lerp
 
@@ -522,7 +485,16 @@ public class ParameterLerper : MonoBehaviour
         // Get the current value of the parameter
         Rect start = (Rect)getter.Invoke(m_Selection, null);
 
+
+        Rect target = new Rect(start.x,start.y,start.width,start.height);
+        float r = Random.value;
+        if (r < 0.25) target.x = Mathf.Max(Mathf.Min(target.x + amount, 1f), 0f);
+        else if (r < 0.5) target.y = Mathf.Max(Mathf.Min(target.y + amount, 1f), 0f);
+        else if (r < 0.75) target.width = Mathf.Max(Mathf.Min(target.width + amount, 1f), 0f);
+        else target.height = Mathf.Max(Mathf.Min(target.height + amount, 1f), 0f);
+
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
 
         bool lerpingBack = false;
 
@@ -553,6 +525,59 @@ public class ParameterLerper : MonoBehaviour
                 target = start;
                 start = next;
                 lerpingBack = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+
+    IEnumerator LerpMesh(ArrayList parameterInfo)
+    {
+        MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        Mesh[] meshes = (Mesh[])parameterInfo[2];
+        Mesh target = meshes[Mathf.FloorToInt(Random.value * meshes.Length)];
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = selectionAsMeshFilter.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Mesh start = (Mesh)getter.Invoke(m_Selection, null);
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+        bool lerpingForward = true;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+            {
+                setter.Invoke(m_Selection, new object[] { target });
+                lerpingForward = false;
+            }
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                lerpingBack = true;
+                lerpingForward = true;
             }
 
             //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
