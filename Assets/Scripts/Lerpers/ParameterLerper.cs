@@ -27,6 +27,8 @@ public class ParameterLerper : MonoBehaviour
     public AudioClip[] m_AudioClips;
     public Mesh[] m_Meshes;
     public Material[] m_Materials;
+    public Font[] m_Fonts;
+    public Sprite[] m_Sprites;
 
 
     protected virtual void Start()
@@ -104,6 +106,67 @@ public class ParameterLerper : MonoBehaviour
 
             // Calculate the new value of the float required through interpolation
             float next = Mathf.Lerp(start, target, t);
+
+            // Set the new value of the float parameter
+
+            setter.Invoke(m_Selection, new object[] { next });
+
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                start = next;
+                lerpingBack = true;
+            }
+
+            //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newFloat;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+
+    IEnumerator LerpInt(ArrayList parameterInfo)
+    {
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        // Set the target float value based on m_Parameters
+        int target = Mathf.FloorToInt((int)parameterInfo[2] + Random.value * ((int)parameterInfo[3] - (int)parameterInfo[2]));
+
+        Debug.Log("Parameter: " + parameterName);
+        Debug.Log("Target: " + target);
+
+        // Obtain the getter and setter methods for the float property to lerp
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        int start = (int)getter.Invoke(m_Selection, null);
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
+
+        // Loop while the time has not yet elapsed
+        bool lerpingBack = false;
+
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            // Calculate the required interpolation amount
+            float t = elapsed / m_CurrentLerpTime;
+
+            // Calculate the new value of the float required through interpolation
+            int next = Mathf.FloorToInt(Mathf.Lerp(start, target, t));
 
             // Set the new value of the float parameter
 
@@ -603,7 +666,7 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
-    IEnumerator LerpMaterial(ArrayList parameterInfo)
+    IEnumerator LerpMaterials(ArrayList parameterInfo)
     {
         //MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
         // Set elapsed time to 0
@@ -641,6 +704,175 @@ public class ParameterLerper : MonoBehaviour
             {
                 
                 setter.Invoke(m_Selection, new object[] { target });
+                lerpingForward = false;
+            }
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                lerpingBack = true;
+                lerpingForward = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+    IEnumerator LerpMaterial(ArrayList parameterInfo)
+    {
+        //MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        //Material[] materials = (Mesh[])parameterInfo[2];
+        //Mesh target = meshes[Mathf.FloorToInt(Random.value * meshes.Length)];
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Material start = (Material)getter.Invoke(m_Selection, null);
+        Material target = m_Materials[Mathf.FloorToInt(Random.value * m_Materials.Length)];
+
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+        bool lerpingForward = true;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+            {
+
+                setter.Invoke(m_Selection, new object[] { target });
+                lerpingForward = false;
+            }
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                lerpingBack = true;
+                lerpingForward = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+    IEnumerator LerpFont(ArrayList parameterInfo)
+    {
+        //AudioSource selectionAsAudioSource = (AudioSource)m_Selection;
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        // Set the target float value based on m_Parameters
+        //Fon[] audioClips = (AudioClip[])parameterInfo[2];
+        Font target = m_Fonts[Mathf.FloorToInt(Random.value * m_Fonts.Length)];
+
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Font start = (Font)getter.Invoke(m_Selection, null);
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+        bool lerpingForward = true;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+            {
+                //selectionAsAudioSource.Stop();
+                setter.Invoke(m_Selection, new object[] { target });
+                //selectionAsAudioSource.Play();
+                lerpingForward = false;
+            }
+
+            if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+            {
+                elapsed = 0;
+                target = start;
+                lerpingBack = true;
+                lerpingForward = true;
+            }
+
+            //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+            // Yield until the next frame
+            yield return null;
+        }
+
+        m_LerpComplete = true;
+    }
+
+
+
+    IEnumerator LerpSprite(ArrayList parameterInfo)
+    {
+        //AudioSource selectionAsAudioSource = (AudioSource)m_Selection;
+        // Set elapsed time to 0
+        float elapsed = 0f;
+
+        string parameterName = (string)parameterInfo[1];
+
+        // Set the target float value based on m_Parameters
+        //Fon[] audioClips = (AudioClip[])parameterInfo[2];
+        Sprite target = m_Sprites[Mathf.FloorToInt(Random.value * m_Sprites.Length)];
+
+
+
+        MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+        MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+        // Get the current value of the parameter
+        Sprite start = (Sprite)getter.Invoke(m_Selection, null);
+
+        //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
+
+        bool lerpingBack = false;
+        bool lerpingForward = true;
+
+        // Loop while the time has not yet elapsed
+        while (elapsed < m_CurrentLerpTime)
+        {
+            // Track how much time passed in this loop
+            elapsed += Time.deltaTime;
+
+            if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+            {
+                //selectionAsAudioSource.Stop();
+                setter.Invoke(m_Selection, new object[] { target });
+                //selectionAsAudioSource.Play();
                 lerpingForward = false;
             }
 
