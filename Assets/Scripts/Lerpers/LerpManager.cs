@@ -23,6 +23,21 @@ public class LerpManager : MonoBehaviour
     private MeshRenderer m_SelectedRenderer;
     private RenderBoundingBox m_RenderBoundingBox;
 
+    enum Selection
+    {
+        AudioSource,
+        Light,
+        Camera,
+        Transform,
+        MeshRenderer,
+        MeshFilter,
+        RigidBody,
+        Text,
+        Slider,
+        Image,
+        BoxCollider,
+        CapsuleCollider
+    }
 
     // Use this for initialization
     void Start()
@@ -42,111 +57,160 @@ public class LerpManager : MonoBehaviour
         {
             if (lerper == null || lerper.m_LerpComplete || lerper.gameObject == null)
             {
+                Debug.Log("Choosing new lerp...");
                 if (m_SelectedGameObject != null)
                 {
+                    Debug.Log("Destroying previous ParameterLerper.");
                     Destroy(m_SelectedGameObject.GetComponent<ParameterLerper>());
                 }
 
+                lerper = null;
 
-                // Get every GameObject
-                Component[] audioSources = FindObjectsOfType<AudioSource>();
-                Component[] lights = FindObjectsOfType<Light>();
-                Component[] cameras = FindObjectsOfType<Camera>();
-                Component[] transforms = FindObjectsOfType<Transform>();
-                Component[] rectTransforms = FindObjectsOfType<RectTransform>();
-                Component[] meshFilters = FindObjectsOfType<MeshFilter>();
-                Component[] meshRenderers = FindObjectsOfType<MeshRenderer>();
-                Component[] rigidbodies = FindObjectsOfType<Rigidbody>();
-                Component[] texts = FindObjectsOfType<Text>();
-                Component[] sliders = FindObjectsOfType<Slider>();
-                Component[] images = FindObjectsOfType<Image>();
+                // Choose a random component type to lerp
+                System.Array values = System.Enum.GetValues(typeof(Selection));
+                Selection type = (Selection)values.GetValue(Random.Range(0, values.Length));
 
-                Component[][] categories = { audioSources, lights, cameras, transforms, meshFilters, meshRenderers, rigidbodies, texts, sliders, images };
-                //Component[][] categories = { images };
 
-                Component[] selectedCategory = categories[Mathf.FloorToInt(Random.value * categories.Length)];
-                if (selectedCategory.Length == 0)
+                Debug.Log("Chose " + type);
+                // Switch on the type to find the appropriate components and process them
+                switch (type)
                 {
-                    //Debug.Log("Empty category.");
-                    lerper = null;
+                    case Selection.AudioSource:
+                        Component[] audioSources = FindObjectsOfType<AudioSource>();
+                        if (SelectComponentFrom(audioSources))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<AudioSourceLerper>();
+                            lerper.m_AudioClips = m_AudioClips;
+                        }
+                        break;
+
+                    case Selection.Light:
+                        Component[] lights = FindObjectsOfType<Light>();
+                        if (SelectComponentFrom(lights))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<LightLerper>();
+                        }
+                        break;
+
+                    case Selection.Camera:
+                        Component[] cameras = FindObjectsOfType<Camera>();
+                        if (SelectComponentFrom(cameras))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<CameraLerper>();
+                        }
+                        break;
+
+                    case Selection.Transform:
+                        Component[] transforms = FindObjectsOfType<Transform>();
+                        if (SelectComponentFrom(transforms))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<TransformLerper>();
+                        }
+                        break;
+
+                    case Selection.MeshFilter:
+                        Component[] meshFilters = FindObjectsOfType<MeshFilter>();
+                        if (SelectComponentFrom(meshFilters))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<MeshFilterLerper>();
+                            lerper.m_Meshes = m_Meshes;
+                        }
+                        break;
+
+                    case Selection.MeshRenderer:
+                        Component[] meshRenderers = FindObjectsOfType<MeshRenderer>();
+                        if (SelectComponentFrom(meshRenderers))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<MeshRendererLerper>();
+                            lerper.m_Materials = m_Materials;
+                        }
+                        break;
+
+                    case Selection.RigidBody:
+                        Component[] rigidbodies = FindObjectsOfType<Rigidbody>();
+                        if (SelectComponentFrom(rigidbodies))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<RigidbodyLerper>();
+                            lerper.m_Meshes = m_Meshes;
+                        }
+                        break;
+
+                    case Selection.Text:
+                        Component[] texts = FindObjectsOfType<Text>();
+                        if (SelectComponentFrom(texts))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<TextLerper>();
+                            lerper.m_Materials = m_Materials;
+                            lerper.m_Fonts = m_Fonts;
+                        }
+                        break;
+
+                    case Selection.Slider:
+                        Component[] sliders = FindObjectsOfType<Slider>();
+                        if (SelectComponentFrom(sliders))
+                        {
+                            Debug.Log("Adding SliderLerper...");
+                            lerper = m_SelectedGameObject.AddComponent<SliderLerper>();
+                        }
+
+                        break;
+
+                    case Selection.Image:
+                        Component[] images = FindObjectsOfType<Image>();
+                        if (SelectComponentFrom(images))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<ImageLerper>();
+                            lerper.m_Sprites = m_Sprites;
+                            lerper.m_Materials = m_Materials;
+                        }
+                        break;
+
+                    case Selection.BoxCollider:
+                        Component[] boxColliders = FindObjectsOfType<BoxCollider>();
+                        if (SelectComponentFrom(boxColliders))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<BoxColliderLerper>();
+                        }
+                        break;
+
+                    case Selection.CapsuleCollider:
+                        Component[] capsuleColliders = FindObjectsOfType<CapsuleCollider>();
+                        if (SelectComponentFrom(capsuleColliders))
+                        {
+                            lerper = m_SelectedGameObject.AddComponent<CapsuleColliderLerper>();
+                        }
+                        break;
+
                 }
-                else
+
+                if (m_SelectedComponent != null)
                 {
-                    Component selection = selectedCategory[Mathf.FloorToInt(Random.value * selectedCategory.Length)];
-                    m_SelectedGameObject = selection.gameObject;
-                    m_SelectedRenderer = m_SelectedGameObject.GetComponent<MeshRenderer>();
-
-
-                    if (selectedCategory == audioSources)
-                    {
-                        Debug.Log("Selected AudioSource...");
-                        lerper = m_SelectedGameObject.AddComponent<AudioSourceLerper>();
-                        lerper.m_AudioClips = m_AudioClips;
-                    }
-                    else if (selectedCategory == lights)
-                    {
-                        Debug.Log("Selected Light...");
-                        lerper = m_SelectedGameObject.AddComponent<LightLerper>();
-                    }
-                    else if (selectedCategory == cameras)
-                    {
-                        Debug.Log("Selected Camera...");
-                        lerper = m_SelectedGameObject.AddComponent<CameraLerper>();
-                    }
-                    else if (selectedCategory == transforms)
-                    {
-                        Debug.Log("Selected Transform...");
-                        lerper = m_SelectedGameObject.AddComponent<TransformLerper>();
-                    }
-                    //else if (selectedCategory == rectTransforms)
-                    //{
-                    //    Debug.Log("Selected RectTransform...");
-                    //    lerper = m_SelectedGameObject.AddComponent<RectTransformLerper>();
-                    //}
-                    else if (selectedCategory == meshFilters)
-                    {
-                        Debug.Log("Selected MeshFilter...");
-                        lerper = m_SelectedGameObject.AddComponent<MeshFilterLerper>();
-                        lerper.m_Meshes = m_Meshes;
-                    }
-                    else if (selectedCategory == meshRenderers)
-                    {
-                        Debug.Log("Selected MeshRenderer...");
-                        lerper = m_SelectedGameObject.AddComponent<MeshRendererLerper>();
-                        lerper.m_Materials = m_Materials;
-                    }
-                    else if (selectedCategory == rigidbodies)
-                    {
-                        Debug.Log("Selected Rigidbody...");
-                        lerper = m_SelectedGameObject.AddComponent<RigidbodyLerper>();
-                        lerper.m_Meshes = m_Meshes;
-                    }
-                    else if (selectedCategory == texts)
-                    {
-                        Debug.Log("Selected Text...");
-                        lerper = m_SelectedGameObject.AddComponent<TextLerper>();
-                        lerper.m_Materials = m_Materials;
-                        lerper.m_Fonts = m_Fonts;
-                    }
-                    else if (selectedCategory == sliders)
-                    {
-                        Debug.Log("Selected Slider...");
-                        lerper = m_SelectedGameObject.AddComponent<SliderLerper>();
-                    }
-                    else if (selectedCategory == images)
-                    {
-                        Debug.Log("Selected Image...");
-                        lerper = m_SelectedGameObject.AddComponent<ImageLerper>();
-                        lerper.m_Sprites = m_Sprites;
-                        lerper.m_Materials = m_Materials;
-                    }
-                    lerper.m_Selection = selection;
+                    lerper.m_Selection = m_SelectedComponent;
                 }
             }
 
             yield return null;
         }
     }
+
+
+    bool SelectComponentFrom(Component[] components)
+    {
+        if (components.Length == 0)
+        {
+            Debug.Log("Found no components of this type.");
+            m_SelectedComponent = null;
+            return false;
+        }
+        else
+        {
+            m_SelectedComponent = components[Random.Range(0, components.Length)];
+            m_SelectedGameObject = m_SelectedComponent.gameObject;
+            m_SelectedRenderer = m_SelectedGameObject.GetComponent<MeshRenderer>();
+            return true;
+        }
+    }
+
 
     IEnumerator UpdateUI()
     {
