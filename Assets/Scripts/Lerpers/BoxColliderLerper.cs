@@ -13,7 +13,6 @@ public class BoxColliderLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpVector3", "size", 0.5f, 1.0f }));
 
         m_Selection = GetComponent<BoxCollider>();
-        BoxCollider b = (BoxCollider)m_Selection;
 
         type = "BoxCollider";
 

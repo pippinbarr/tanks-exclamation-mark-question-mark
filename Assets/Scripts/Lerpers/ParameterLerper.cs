@@ -892,4 +892,197 @@ public class ParameterLerper : MonoBehaviour
 
         m_LerpComplete = true;
     }
+
+
+    //IEnumerator LerpMainParticleSystemModule(ArrayList parameterInfo)
+    //{
+    //    Debug.Log("Lerping Main Particle System Module");
+    //    // Set elapsed time to 0
+    //    float elapsed = 0f;
+
+    //    string parameterName = (string)parameterInfo[1];
+
+    //    MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+    //    MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+    //    // Get the current value of the parameter
+    //    ParticleSystem.MainModule start = (ParticleSystem.MainModule)getter.Invoke(m_Selection, null);
+
+
+    //    bool lerpingBack = false;
+    //    bool lerpingForward = true;
+
+    //    // Loop while the time has not yet elapsed
+    //    while (elapsed < m_CurrentLerpTime)
+    //    {
+    //        // Track how much time passed in this loop
+    //        elapsed += Time.deltaTime;
+
+    //        if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+    //        {
+    //            ParticleSystem.MinMaxCurve curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.startDelay = curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.startLifetime = curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.startSpeed = curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constantMin = Random.value * 20f;
+    //            curve.constantMax = Random.value * 20f;
+
+    //            start.startSize = curve;
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.gravityModifier = curve;
+
+    //            start.randomizeRotationDirection = Random.value;
+
+    //            start.startColor = Random.ColorHSV();
+
+    //            start.maxParticles = Mathf.FloorToInt(Random.value * 100f);
+    //            lerpingForward = false;
+    //        }
+
+    //        if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+    //        {
+    //            elapsed = 0;
+    //            //target = start;
+    //            lerpingBack = true;
+    //            lerpingForward = true;
+    //        }
+
+    //        //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+    //        // Yield until the next frame
+    //        yield return null;
+    //    }
+
+    //    m_LerpComplete = true;
+    //}
+
+
+    //IEnumerator LerpEmissionParticleSystemModule(ArrayList parameterInfo)
+    //{
+    //    Debug.Log("Lerping Main Particle System Module");
+    //    // Set elapsed time to 0
+    //    float elapsed = 0f;
+
+    //    string parameterName = (string)parameterInfo[1];
+
+    //    MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+    //    MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+    //    // Get the current value of the parameter
+    //    ParticleSystem.EmissionModule start = (ParticleSystem.EmissionModule)getter.Invoke(m_Selection, null);
+
+
+    //    bool lerpingBack = false;
+    //    bool lerpingForward = true;
+
+    //    // Loop while the time has not yet elapsed
+    //    while (elapsed < m_CurrentLerpTime)
+    //    {
+    //        // Track how much time passed in this loop
+    //        elapsed += Time.deltaTime;
+
+    //        if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+    //        {
+    //            ParticleSystem.MinMaxCurve curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.rateOverTime = curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.rateOverDistance = curve;
+
+
+    //            lerpingForward = false;
+    //        }
+
+    //        if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+    //        {
+    //            elapsed = 0;
+    //            //target = start;
+    //            lerpingBack = true;
+    //            lerpingForward = true;
+    //        }
+
+    //        //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+    //        // Yield until the next frame
+    //        yield return null;
+    //    }
+
+    //    m_LerpComplete = true;
+    //}
+
+
+
+    //IEnumerator LerpShapeParticleSystemModule(ArrayList parameterInfo)
+    //{
+    //    Debug.Log("Lerping Main Particle System Module");
+    //    // Set elapsed time to 0
+    //    float elapsed = 0f;
+
+    //    string parameterName = (string)parameterInfo[1];
+
+    //    MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
+    //    MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
+
+    //    // Get the current value of the parameter
+    //    ParticleSystem.ShapeModule start = (ParticleSystem.ShapeModule)getter.Invoke(m_Selection, null);
+
+
+    //    bool lerpingBack = false;
+    //    bool lerpingForward = true;
+
+    //    // Loop while the time has not yet elapsed
+    //    while (elapsed < m_CurrentLerpTime)
+    //    {
+    //        // Track how much time passed in this loop
+    //        elapsed += Time.deltaTime;
+
+    //        if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
+    //        {
+    //            start.shapeType = ParticleSystemShapeType.Box;
+    //            ParticleSystem.MinMaxCurve curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.rateOverTime = curve;
+
+    //            curve = new ParticleSystem.MinMaxCurve();
+    //            curve.constant = Random.value * 20f;
+    //            start.rateOverDistance = curve;
+
+
+    //            lerpingForward = false;
+    //        }
+
+    //        if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
+    //        {
+    //            elapsed = 0;
+    //            //target = start;
+    //            lerpingBack = true;
+    //            lerpingForward = true;
+    //        }
+
+    //        //m_ParameterText.text = m_Selection.transform.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newRotation;
+
+    //        // Yield until the next frame
+    //        yield return null;
+    //    }
+
+    //    m_LerpComplete = true;
+    //}
 }

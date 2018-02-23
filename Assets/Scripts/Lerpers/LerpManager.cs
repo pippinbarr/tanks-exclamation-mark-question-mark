@@ -36,7 +36,8 @@ public class LerpManager : MonoBehaviour
         Slider,
         Image,
         BoxCollider,
-        CapsuleCollider
+        CapsuleCollider,
+        //ParticleSystem
     }
 
     // Use this for initialization
@@ -69,7 +70,6 @@ public class LerpManager : MonoBehaviour
                 // Choose a random component type to lerp
                 System.Array values = System.Enum.GetValues(typeof(Selection));
                 Selection type = (Selection)values.GetValue(Random.Range(0, values.Length));
-
 
                 Debug.Log("Chose " + type);
                 // Switch on the type to find the appropriate components and process them
@@ -180,6 +180,14 @@ public class LerpManager : MonoBehaviour
                             lerper = m_SelectedGameObject.AddComponent<CapsuleColliderLerper>();
                         }
                         break;
+                    //case Selection.ParticleSystem:
+                        //Component[] particleSystems = FindObjectsOfType<ParticleSystem>();
+                        //if (SelectComponentFrom(particleSystems))
+                        //{
+                        //    Debug.Log("Creating lerper.");
+                        //    lerper = m_SelectedGameObject.AddComponent<ParticleSystemLerper>();
+                        //}
+                        //break;
 
                 }
 

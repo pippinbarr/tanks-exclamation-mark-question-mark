@@ -15,7 +15,6 @@ public class CapsuleColliderLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "direction", 0, 2}));
 
         m_Selection = GetComponent<CapsuleCollider>();
-        CapsuleCollider b = (CapsuleCollider)m_Selection;
 
         type = "CapsuleCollider";
 

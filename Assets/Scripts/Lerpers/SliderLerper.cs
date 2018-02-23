@@ -17,8 +17,6 @@ public class SliderLerper : ParameterLerper {
 
 
         m_Selection = GetComponent<Slider>();
-        Slider s = (Slider)m_Selection;
-        //s.int
 
         type = "Slider";
 
