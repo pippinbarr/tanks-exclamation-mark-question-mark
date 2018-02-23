@@ -79,8 +79,8 @@ public class ParameterLerper : MonoBehaviour
         // Set the target float value based on m_Parameters
         float target = (float)parameterInfo[2] + Random.value * ((float)parameterInfo[3] - (float)parameterInfo[2]);
 
-        Debug.Log("Parameter: " + parameterName);
-        Debug.Log("Target: " + target);
+        //Debug.Log("Parameter: " + parameterName);
+        //Debug.Log("Target: " + target);
 
         // Obtain the getter and setter methods for the float property to lerp
 
@@ -140,8 +140,8 @@ public class ParameterLerper : MonoBehaviour
         // Set the target float value based on m_Parameters
         int target = Mathf.FloorToInt((int)parameterInfo[2] + Random.value * ((int)parameterInfo[3] - (int)parameterInfo[2]));
 
-        Debug.Log("Parameter: " + parameterName);
-        Debug.Log("Target: " + target);
+        //Debug.Log("Parameter: " + parameterName);
+        //Debug.Log("Target: " + target);
 
         // Obtain the getter and setter methods for the float property to lerp
 
@@ -248,7 +248,7 @@ public class ParameterLerper : MonoBehaviour
 
     IEnumerator LerpEnum(ArrayList parameterInfo)
     {
-        Debug.Log("LerpEnum");
+        //Debug.Log("LerpEnum");
         // Set elapsed time to 0
         float elapsed = 0f;
 
@@ -265,7 +265,7 @@ public class ParameterLerper : MonoBehaviour
 
         object target = parameterInfo[2 + Mathf.FloorToInt(Random.value * (parameterInfo.Count - 2))];
 
-        Debug.Log(target.ToString());
+        //Debug.Log(target.ToString());
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
 
@@ -317,7 +317,7 @@ public class ParameterLerper : MonoBehaviour
 
         bool target = !start;
 
-        Debug.Log("Target: " + target);
+        //Debug.Log("Target: " + target);
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + target;
 
@@ -432,7 +432,7 @@ public class ParameterLerper : MonoBehaviour
         float newY = start.eulerAngles.y + (Random.value < 0.5f ? negativeAmount : positiveAmount);
         float newZ = start.eulerAngles.z + (Random.value < 0.5f ? negativeAmount : positiveAmount);
 
-        Debug.Log(m_Selection.name + ": " + start.eulerAngles.x + "," + start.eulerAngles.y + "," + start.eulerAngles.z + " > " + newX + "," + newY + "," + newZ);
+        //Debug.Log(m_Selection.name + ": " + start.eulerAngles.x + "," + start.eulerAngles.y + "," + start.eulerAngles.z + " > " + newX + "," + newY + "," + newZ);
 
         // Set the target float value based on m_Parameters
         Quaternion target = new Quaternion();

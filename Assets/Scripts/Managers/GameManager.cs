@@ -17,6 +17,7 @@ namespace Complete
         public GameObject[] m_TankPrefabs;
         public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
         public List<Transform> wayPointsForAI;
+        public Text instructions;
 
         private int m_RoundNumber;                  // Which round the game is currently on.
         private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
@@ -24,15 +25,38 @@ namespace Complete
         private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
 
+        private bool gameStarted = false;
 
         private void Start()
         {
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds(m_StartDelay);
             m_EndWait = new WaitForSeconds(m_EndDelay);
+        }
+
+        void Update()
+        {
+            if (gameStarted)
+            {
+                return;
+            }
+            if (Input.anyKeyDown)
+            {
+                instructions.enabled = false;
+                StartCoroutine(StartGame());
+            }
+        }
+
+
+        private IEnumerator StartGame()
+        {
+            gameStarted = true;
+            m_MessageText.text = "";
 
             SpawnAllTanks();
             SetCameraTargets();
+
+            yield return new WaitForSeconds(2f);
 
             // Once the tanks have been created and the camera is using them as targets, start the game.
             StartCoroutine(GameLoop());
@@ -51,6 +75,7 @@ namespace Complete
                 // Set player number (note this means you should put Player tanks early on)
                 m_Tanks[i].m_PlayerNumber = i + 1;
                 m_Tanks[i].Setup(wayPointsForAI);
+                m_Tanks[i].DisableControl();
             }
         }
 

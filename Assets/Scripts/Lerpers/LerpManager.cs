@@ -58,10 +58,10 @@ public class LerpManager : MonoBehaviour
         {
             if (lerper == null || lerper.m_LerpComplete || lerper.gameObject == null)
             {
-                Debug.Log("Choosing new lerp...");
+                //Debug.Log("Choosing new lerp...");
                 if (m_SelectedGameObject != null)
                 {
-                    Debug.Log("Destroying previous ParameterLerper.");
+                    //Debug.Log("Destroying previous ParameterLerper.");
                     Destroy(m_SelectedGameObject.GetComponent<ParameterLerper>());
                 }
 
@@ -71,7 +71,7 @@ public class LerpManager : MonoBehaviour
                 System.Array values = System.Enum.GetValues(typeof(Selection));
                 Selection type = (Selection)values.GetValue(Random.Range(0, values.Length));
 
-                Debug.Log("Chose " + type);
+                //Debug.Log("Chose " + type);
                 // Switch on the type to find the appropriate components and process them
                 switch (type)
                 {
@@ -149,7 +149,7 @@ public class LerpManager : MonoBehaviour
                         Component[] sliders = FindObjectsOfType<Slider>();
                         if (SelectComponentFrom(sliders))
                         {
-                            Debug.Log("Adding SliderLerper...");
+                            //Debug.Log("Adding SliderLerper...");
                             lerper = m_SelectedGameObject.AddComponent<SliderLerper>();
                         }
 
@@ -206,7 +206,7 @@ public class LerpManager : MonoBehaviour
     {
         if (components.Length == 0)
         {
-            Debug.Log("Found no components of this type.");
+            //Debug.Log("Found no components of this type.");
             m_SelectedComponent = null;
             return false;
         }
