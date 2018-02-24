@@ -26,7 +26,7 @@ public class TextLerper : ParameterLerper {
             "TextAnchor.Italic",
             "TextAnchor.Normal"
         }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "fontSize", 1, 150 }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "fontSize", 1, 150, true }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "lineSpacing", 0f, 10f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "alignByGeometry" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpEnum", "horizonalOverflow",
@@ -38,8 +38,8 @@ public class TextLerper : ParameterLerper {
             "VerticalWrapMode.Truncate"
         }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "resizeTextForBestFit" }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "resizeTextMinSize", 1, 150 }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "resizeTextMaxSize", 50, 150 }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "resizeTextMinSize", 1, 150, true }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "resizeTextMaxSize", 50, 150, true }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpColor", "color" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpMaterial", "materials" }));
 

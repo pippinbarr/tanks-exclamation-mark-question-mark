@@ -42,6 +42,7 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
+
     public virtual IEnumerator StartLerp()
     {
 
@@ -52,7 +53,7 @@ public class ParameterLerper : MonoBehaviour
         PropertyInfo pInfo = m_Selection.GetType().GetProperty(parameterName);
         if (pInfo != null)
         {
-            LerpManager.output.text = m_Selection.name + ":" + type + ":" + parameterToLerp[1];
+            LerpManager.output.text = m_Selection.name + ": " + type + "." + parameterToLerp[1];
 
             m_CurrentLerpTime = m_MinimumLerpTime + Random.value * (m_MaximumLerpTime - m_MinimumLerpTime);
             StartCoroutine((string)parameterToLerp[0], parameterToLerp);
@@ -69,6 +70,8 @@ public class ParameterLerper : MonoBehaviour
 
 
 
+    // ADDITIVE
+
     IEnumerator LerpFloat(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -76,20 +79,20 @@ public class ParameterLerper : MonoBehaviour
 
         string parameterName = (string)parameterInfo[1];
 
-        // Set the target float value based on m_Parameters
-        float target = (float)parameterInfo[2] + Random.value * ((float)parameterInfo[3] - (float)parameterInfo[2]);
+        float min = (float)parameterInfo[2];
+        float max = (float)parameterInfo[3];
+        float amount = min + Random.value * (max - min);
+        if (Random.value < 0.5f) amount = -amount;
 
-        //Debug.Log("Parameter: " + parameterName);
-        //Debug.Log("Target: " + target);
 
         // Obtain the getter and setter methods for the float property to lerp
-
-
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
 
         // Get the current value of the parameter
         float start = (float)getter.Invoke(m_Selection, null);
+
+        float target = start + amount;
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
 
@@ -130,6 +133,8 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
+    // HAS ADDITIVE AND NON-ADDITIVE VERSION BASED ON PARAMETER
+
     IEnumerator LerpInt(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -137,14 +142,9 @@ public class ParameterLerper : MonoBehaviour
 
         string parameterName = (string)parameterInfo[1];
 
-        // Set the target float value based on m_Parameters
-        int target = Mathf.FloorToInt((int)parameterInfo[2] + Random.value * ((int)parameterInfo[3] - (int)parameterInfo[2]));
-
-        //Debug.Log("Parameter: " + parameterName);
-        //Debug.Log("Target: " + target);
+        bool additive = (bool)parameterInfo[4];
 
         // Obtain the getter and setter methods for the float property to lerp
-
 
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
         MethodInfo setter = m_Selection.GetType().GetProperty(parameterName).GetSetMethod();
@@ -152,6 +152,21 @@ public class ParameterLerper : MonoBehaviour
         // Get the current value of the parameter
         int start = (int)getter.Invoke(m_Selection, null);
 
+        int target;
+        int min = (int)parameterInfo[2];
+        int max = (int)parameterInfo[3];
+
+        // Set the target float value based on m_Parameters
+        if (additive)
+        {
+            int amount = Mathf.FloorToInt(min + Random.value * (max - min));
+            if (Random.value < 0.5f) amount = -amount;
+            target = start + amount;
+        }
+        else
+        {
+            target = Mathf.FloorToInt(min + Random.value * ((max - min));
+        }
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
 
         // Loop while the time has not yet elapsed
@@ -172,7 +187,6 @@ public class ParameterLerper : MonoBehaviour
 
             setter.Invoke(m_Selection, new object[] { next });
 
-
             if (m_Bounce && elapsed >= m_CurrentLerpTime && !lerpingBack)
             {
                 elapsed = 0;
@@ -180,8 +194,6 @@ public class ParameterLerper : MonoBehaviour
                 start = next;
                 lerpingBack = true;
             }
-
-            //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + newFloat;
 
             // Yield until the next frame
             yield return null;
@@ -191,6 +203,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
+    // NON-ADDITIVE
     IEnumerator LerpColor(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -246,6 +259,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
+    // NON-ADDITIVE
     IEnumerator LerpEnum(ArrayList parameterInfo)
     {
         //Debug.Log("LerpEnum");
@@ -299,7 +313,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
-
+    // NON-ADDITIVE
     IEnumerator LerpBool(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -351,7 +365,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
-
+    // NON-ADDITIVE
     IEnumerator LerpAudioClip(ArrayList parameterInfo)
     {
         AudioSource selectionAsAudioSource = (AudioSource)m_Selection;
@@ -409,7 +423,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
-
+    // ADDITIVE, ONE PROPERTY AT A TIME
     IEnumerator LerpRotation(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -425,12 +439,28 @@ public class ParameterLerper : MonoBehaviour
         // Get the current value of the parameter
         Quaternion start = (Quaternion)getter.Invoke(m_Selection, null);
 
-        float negativeAmount = (float)parameterInfo[2];
-        float positiveAmount = (float)parameterInfo[3];
+        float min = (float)parameterInfo[2];
+        float max = (float)parameterInfo[3];
+        float amount = min + Random.value * (max - min);
+        if (Random.value < 0.5f) amount = -amount;
 
-        float newX = start.eulerAngles.x + (Random.value < 0.5f ? negativeAmount : positiveAmount);
-        float newY = start.eulerAngles.y + (Random.value < 0.5f ? negativeAmount : positiveAmount);
-        float newZ = start.eulerAngles.z + (Random.value < 0.5f ? negativeAmount : positiveAmount);
+        float r = Random.value;
+        float newX = start.eulerAngles.x;
+        float newY = start.eulerAngles.y;
+        float newZ = start.eulerAngles.z;
+        if (r < 0.33f)
+        {
+            newX += amount;
+        }
+        else if (r < 0.66)
+        {
+            newY += amount;
+        }
+        else
+        {
+            newZ += amount;
+        }
+
 
         //Debug.Log(m_Selection.name + ": " + start.eulerAngles.x + "," + start.eulerAngles.y + "," + start.eulerAngles.z + " > " + newX + "," + newY + "," + newZ);
 
@@ -476,6 +506,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
+    // ADDITIVE, ONLY ONE AXIS PER LERP
     IEnumerator LerpVector3(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -485,6 +516,7 @@ public class ParameterLerper : MonoBehaviour
         float min = (float)parameterInfo[2];
         float max = (float)parameterInfo[3];
         float amount = min + Random.value * (max - min);
+        if (Random.value < 0.5f) amount = -amount;
 
         // Obtain the getter and setter methods for the float property to lerp
 
@@ -498,9 +530,9 @@ public class ParameterLerper : MonoBehaviour
         // Set the target float value based on m_Parameters
         Vector3 target = new Vector3(start.x, start.y, start.z);
         float r = Random.value;
-        if (r < 0.33) target.x += Random.value < 0.5f ? amount : -amount;
-        else if (r < 0.66) target.y += Random.value < 0.5f ? amount : -amount;
-        else target.z += Random.value < 0.5f ? amount : -amount;
+        if (r < 0.33) target.x += amount;
+        else if (r < 0.66) target.y += amount;
+        else target.z += amount;
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startRotation;
 
@@ -540,7 +572,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
-
+    // ADDITIVE, ONE PROPERTY PER LERP
     IEnumerator LerpRect(ArrayList parameterInfo)
     {
         // Set elapsed time to 0
@@ -563,7 +595,7 @@ public class ParameterLerper : MonoBehaviour
         Rect start = (Rect)getter.Invoke(m_Selection, null);
 
 
-        Rect target = new Rect(start.x,start.y,start.width,start.height);
+        Rect target = new Rect(start.x, start.y, start.width, start.height);
         float r = Random.value;
         if (r < 0.25) target.x = Mathf.Max(Mathf.Min(target.x + amount, 1f), 0f);
         else if (r < 0.5) target.y = Mathf.Max(Mathf.Min(target.y + amount, 1f), 0f);
@@ -614,6 +646,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
+    // NON-ADDITIVE
     IEnumerator LerpMesh(ArrayList parameterInfo)
     {
         MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
@@ -666,6 +699,7 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
+    // NON-ADDITIVE
     IEnumerator LerpMaterials(ArrayList parameterInfo)
     {
         //MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
@@ -702,7 +736,7 @@ public class ParameterLerper : MonoBehaviour
 
             if (elapsed >= m_CurrentLerpTime / 2 && lerpingForward)
             {
-                
+
                 setter.Invoke(m_Selection, new object[] { target });
                 lerpingForward = false;
             }
@@ -724,6 +758,7 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
+    // NON-ADDITIVE
     IEnumerator LerpMaterial(ArrayList parameterInfo)
     {
         //MeshFilter selectionAsMeshFilter = (MeshFilter)m_Selection;
@@ -779,6 +814,7 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
+    // NON-ADDITIVE
     IEnumerator LerpFont(ArrayList parameterInfo)
     {
         //AudioSource selectionAsAudioSource = (AudioSource)m_Selection;
@@ -836,7 +872,7 @@ public class ParameterLerper : MonoBehaviour
     }
 
 
-
+    // NON-ADDITIVE
     IEnumerator LerpSprite(ArrayList parameterInfo)
     {
         //AudioSource selectionAsAudioSource = (AudioSource)m_Selection;
@@ -893,6 +929,9 @@ public class ParameterLerper : MonoBehaviour
         m_LerpComplete = true;
     }
 
+
+    // THE WASTELAND OF PARTICLE SYSTEM PROPERTIES LURKS BELOW
+    // BEWARE.
 
     //IEnumerator LerpMainParticleSystemModule(ArrayList parameterInfo)
     //{

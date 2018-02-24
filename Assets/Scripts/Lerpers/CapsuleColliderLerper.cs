@@ -12,7 +12,7 @@ public class CapsuleColliderLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpVector3", "center", 0.5f, 1.0f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "radius", 0.5f, 1.0f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "height", 0.5f, 1.0f }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "direction", 0, 2}));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "direction", 0, 2, false}));
 
         m_Selection = GetComponent<CapsuleCollider>();
 
