@@ -14,7 +14,7 @@ public class ImageLerper : ParameterLerper {
         m_Parameters.Add(new ArrayList(new object[] { "LerpMaterial", "material", m_Materials }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpEnum", "type", "Image.Type.Filled", "Image.Type.Sliced", "Image.Type.Simple", "Image.Type.Tiled" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpEnum", "fillMethod", "Image.FillMethod.Horizontal", "Image.FillMethod.Vertical", "Image.FillMethod.Radial90", "Image.FillMethod.Radial180", "Image.FillMethod.Radial360" }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "fillAmount", 0f, 1f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "fillAmount", 0.25f, 0.5f, 0f, 1f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "fillOrigin", 0, 3, false }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "fillClockwise" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "fillCenter" }));

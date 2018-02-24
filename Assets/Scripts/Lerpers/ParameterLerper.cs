@@ -84,6 +84,9 @@ public class ParameterLerper : MonoBehaviour
         float amount = min + Random.value * (max - min);
         if (Random.value < 0.5f) amount = -amount;
 
+        float rangeMin = (float)parameterInfo[4];
+        float rangeMax = (float)parameterInfo[5];
+
 
         // Obtain the getter and setter methods for the float property to lerp
         MethodInfo getter = m_Selection.GetType().GetProperty(parameterName).GetGetMethod();
@@ -92,7 +95,8 @@ public class ParameterLerper : MonoBehaviour
         // Get the current value of the parameter
         float start = (float)getter.Invoke(m_Selection, null);
 
-        float target = start + amount;
+        float target = Mathf.Clamp(start + amount,rangeMin,rangeMax);
+
 
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
 
@@ -156,6 +160,7 @@ public class ParameterLerper : MonoBehaviour
         int min = (int)parameterInfo[2];
         int max = (int)parameterInfo[3];
 
+
         // Set the target float value based on m_Parameters
         if (additive)
         {
@@ -165,7 +170,7 @@ public class ParameterLerper : MonoBehaviour
         }
         else
         {
-            target = Mathf.FloorToInt(min + Random.value * ((max - min));
+            target = Mathf.FloorToInt(min + Random.value * (max - min));
         }
         //m_ParameterText.text = m_Selection.GetType() + " " + m_Selection.name + " " + m_Selection.GetInstanceID() + "\n" + parameterName + ": " + startFloat;
 

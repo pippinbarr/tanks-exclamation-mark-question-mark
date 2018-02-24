@@ -232,6 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Output: {fileID: 1495276871}
+  minimumLerpTime: 0.1
+  maximumLerpTime: 0.25
   m_AudioClips:
   - {fileID: 8300000, guid: 8ce5d020a687c314891341b4126d1de2, type: 3}
   - {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
@@ -639,10 +641,6 @@ Prefab:
     - target: {fileID: 488946, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6476316, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
-      propertyPath: m_Convex
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}

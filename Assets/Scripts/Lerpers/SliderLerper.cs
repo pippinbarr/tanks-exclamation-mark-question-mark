@@ -10,9 +10,9 @@ public class SliderLerper : ParameterLerper {
         base.Start();
 
         m_Parameters.Add(new ArrayList(new object[] { "LerpEnum", "direction", "Slider.Direction.BottomToTop", "Slider.Direction.TopToBottom", "Slider.Direction.LeftToRight", "Slider.Direction.RightToLeft" }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "minValue", 0f, 200f }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "maxValue", 0f, 200f }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "value", 0f, 200f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "minValue", 25f, 50f, 0f, 200f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "maxValue", 25f, 50f, 0f, 200f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "value", 25f, 50f, 0f, 200f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "interactable" }));
 
 

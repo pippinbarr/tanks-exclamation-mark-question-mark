@@ -10,6 +10,8 @@ public class LerpManager : MonoBehaviour
 
     public Text m_Output;
     public static Text output;
+    public float minimumLerpTime = 0.1f;
+    public float maximumLerpTime = 1f;
 
     public AudioClip[] m_AudioClips;
     public Mesh[] m_Meshes;
@@ -193,6 +195,8 @@ public class LerpManager : MonoBehaviour
 
                 if (m_SelectedComponent != null)
                 {
+                    lerper.m_MinimumLerpTime = minimumLerpTime;
+                    lerper.m_MaximumLerpTime = maximumLerpTime;
                     lerper.m_Selection = m_SelectedComponent;
                 }
             }

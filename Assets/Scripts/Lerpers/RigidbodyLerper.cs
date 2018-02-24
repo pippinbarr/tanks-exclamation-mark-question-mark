@@ -8,9 +8,9 @@ public class RigidbodyLerper : ParameterLerper {
 	protected override void Start () {
         base.Start();
 
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "mass", 0f, 100f }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "drag", 0f, 100f }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "angularDrag", 0f, 100f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "mass", 0.5f, 5f, 0f, 1000f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "drag", 1f, 10f, 0f, 1000f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "angularDrag", 1f, 10f, 0f, 1000f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "useGravity" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "isKinematic" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpEnum", "constraints", "RigidbodyConstraints.FreezeAll", "RigidbodyConstraints.FreezePosition", "RigidbodyConstraints.FreezePositionX", "RigidbodyConstraints.FreezePositionY", "RigidbodyConstraints.FreezePositionZ", "RigidbodyConstraints.FreezeRotation", "RigidbodyConstraints.FreezeRotationX", "RigidbodyConstraints.FreezeRotationY", "RigidbodyConstraints.FreezeRotationZ", "RigidbodyConstraints.None"}));

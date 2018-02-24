@@ -27,7 +27,7 @@ public class TextLerper : ParameterLerper {
             "TextAnchor.Normal"
         }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpInt", "fontSize", 1, 150, true }));
-        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "lineSpacing", 0f, 10f }));
+        m_Parameters.Add(new ArrayList(new object[] { "LerpFloat", "lineSpacing", 0.5f, 2f, 0f, 10f }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpBool", "alignByGeometry" }));
         m_Parameters.Add(new ArrayList(new object[] { "LerpEnum", "horizonalOverflow",
             "HorizontalWrapMode.Overflow",
