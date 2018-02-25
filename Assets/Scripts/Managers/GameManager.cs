@@ -17,7 +17,10 @@ namespace Complete
         public GameObject[] m_TankPrefabs;
         public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
         public List<Transform> wayPointsForAI;
+        public Text title;
         public Text instructions;
+        public RawImage black;
+        public LerpManager lerpManager;
 
         private int m_RoundNumber;                  // Which round the game is currently on.
         private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
@@ -25,34 +28,86 @@ namespace Complete
         private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
 
-        private bool gameStarted = false;
+        //private bool gameStarted = false;
+        private bool listening = false;
 
         private void Start()
         {
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds(m_StartDelay);
             m_EndWait = new WaitForSeconds(m_EndDelay);
+
+            StartCoroutine(FadeOutBlack());
+        }
+
+        IEnumerator FadeOutBlack()
+        {
+            yield return new WaitForSeconds(2f);
+
+            title.enabled = true;
+
+            yield return new WaitForSeconds(2f);
+
+            Color next = black.color;
+            while (black.color.a > 0)
+            {
+                next.a -= 0.025f;
+                black.color = next;
+                yield return null;
+            }
+
+            black.enabled = false;
+
+            yield return new WaitForSeconds(1f);
+
+            next = instructions.color;
+            while (instructions.color.a < 1f)
+            {
+                next.a += 0.05f;
+                instructions.color = next;
+                yield return null;
+            }
+
+            listening = true;
         }
 
         void Update()
         {
-            if (gameStarted)
+            if (!listening)
             {
                 return;
             }
+
             if (Input.anyKeyDown)
             {
-                instructions.enabled = false;
-                StartCoroutine(StartGame());
+                StartCoroutine(FadeInstructions());
+                listening = false;
             }
         }
 
+        private IEnumerator FadeInstructions()
+        {
+            Color next = instructions.color;
+            while (instructions.color.a > 0f)
+            {
+                next.a -= 0.05f;
+                instructions.color = next;
+                yield return null;
+            }
+
+            instructions.enabled = false;
+
+            StartCoroutine(StartGame());
+
+        }
 
         private IEnumerator StartGame()
         {
-            gameStarted = true;
+            //gameStarted = true;
             m_MessageText.text = "";
 
+            lerpManager.enabled = true;
+            GetComponent<AudioSource>().Play();
             SpawnAllTanks();
             SetCameraTargets();
 
