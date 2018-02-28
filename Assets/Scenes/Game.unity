@@ -232,8 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Output: {fileID: 1495276871}
-  minimumLerpTime: 0.1
-  maximumLerpTime: 0.25
+  minimumLerpTime: 1
+  maximumLerpTime: 1
   m_AudioClips:
   - {fileID: 8300000, guid: 8ce5d020a687c314891341b4126d1de2, type: 3}
   - {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}

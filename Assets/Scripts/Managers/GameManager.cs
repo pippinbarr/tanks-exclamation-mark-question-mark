@@ -33,6 +33,8 @@ namespace Complete
 
         private void Start()
         {
+            Cursor.visible = false;
+
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds(m_StartDelay);
             m_EndWait = new WaitForSeconds(m_EndDelay);
