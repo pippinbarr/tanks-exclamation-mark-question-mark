@@ -73,7 +73,10 @@ public class LerpManager : MonoBehaviour
                 System.Array values = System.Enum.GetValues(typeof(Selection));
                 Selection type = (Selection)values.GetValue(Random.Range(0, values.Length));
 
-                //Debug.Log("Chose " + type);
+                //type = Selection.Camera;
+
+                Debug.Log("Chose " + type);
+
                 // Switch on the type to find the appropriate components and process them
                 switch (type)
                 {

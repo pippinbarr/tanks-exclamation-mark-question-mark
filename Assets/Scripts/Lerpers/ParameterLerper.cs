@@ -48,7 +48,8 @@ public class ParameterLerper : MonoBehaviour
 
         ArrayList parameterToLerp = (ArrayList)m_Parameters[Mathf.FloorToInt(Random.value * m_Parameters.Count)];
         string parameterName = (string)parameterToLerp[1];
-        //Debug.Log("Parameter: " + parameterToLerp[1]);
+
+        Debug.Log("Parameter: " + parameterToLerp[1]);
 
         PropertyInfo pInfo = m_Selection.GetType().GetProperty(parameterName);
         if (pInfo != null)
