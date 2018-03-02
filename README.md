@@ -1,15 +1,23 @@
 ## The Game
 
-_TANKS!ES_
+_Tanks!?_
+
+## Getting the game
+
+* Download [Tanks!? for Mac OS X](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-mac.zip)
+* Download [Tanks!? for Windows](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-windows.zip)
+* Play [Tanks!? online (WebGL)](https://www.pippinbarr.com/games/tanks-exclamation-mark-question-mark/)
+
+
 
 ## Information
 
-__This is the second repository for the TANKS!ES project, the former repository is here https://github.com/pippinbarr/tankses/ for posterity and despair__
+__This is the second repository for the _Tanks!?_ (previously _TANKS!ES_) project, the former repository is here https://github.com/pippinbarr/tankses/ for posterity and despair__
 
-* [Code repository](https://github.com/pippinbarr/tankses-ii/) (you're looking at it)
-* [Process documentation](https://github.com/pippinbarr/tankses-ii/wiki)
-* [Blog posts about *TANKS!ES*](http://www.pippinbarr.com/search.html?q=tanks!es)
-* Press Kit coming later!
+* [Code repository](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/) (you're looking at it)
+* [Process documentation](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/wiki)
+* [Blog posts about _Tanks!?_](http://www.pippinbarr.com/search.html?q=tankses)
+* [Press kit for _Tanks!?_](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/tree/master/press)
 
 ## License
 

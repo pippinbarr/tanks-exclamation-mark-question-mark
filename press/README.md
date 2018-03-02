@@ -4,8 +4,10 @@
 * [Tanks!? for Mac OS X](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-mac.zip)
 * [Tanks!? for Windows](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-windows.zip)
 
+
 #### Play Tanks!? online
 * [Tanks!? (WebGL)](https://www.pippinbarr.com/games/tanks-exclamation-mark-question-mark/)
+
 
 ## The basics
 
@@ -95,7 +97,7 @@ _Tanks!?_ is an open source game licensed under a [Creative Commons Attribution-
 ## Credits
 
 * Pippin Barr: everything that isn't the original tutorial.
-* Unity Technologies: the original tutorial
+* Christoph Peters et al., Unity Technologies: the original tutorial
 
 ## Contact
 
