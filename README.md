@@ -25,6 +25,6 @@ Christoph Peters's original _Tanks!_ tutorial code and assets are licensed under
 
 To the best of my knowledge, the starter scripts and other tutorial material in Unity's [Live Session: Pluggable AI With Scriptable Objects](https://unity3d.com/learn/tutorials/topics/navigation/intro-and-session-goals?playlist=17105) tutorial are also public domain.
 
-Pippin Barr's modifications to _TANKS!ES_ are licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](http://creativecommons.org/licenses/by-nc/3.0/).
+Pippin Barr's modifications licensed under a [Creative Commons Attribution-NonCommercial 3.0 Unported License](http://creativecommons.org/licenses/by-nc/3.0/).
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a>
