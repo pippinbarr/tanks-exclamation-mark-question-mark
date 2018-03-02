@@ -232,8 +232,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Output: {fileID: 1495276871}
-  minimumLerpTime: 1
-  maximumLerpTime: 1
+  minimumLerpTime: 0.75
+  maximumLerpTime: 0.75
   m_AudioClips:
   - {fileID: 8300000, guid: 8ce5d020a687c314891341b4126d1de2, type: 3}
   - {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
@@ -312,7 +312,7 @@ MonoBehaviour:
   - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   m_Fonts:
   - {fileID: 12800000, guid: 3d7fe0a26ba72d949874021dc3d6995e, type: 3}
-  - {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 12800000, guid: 58703a5609e05408b9b01f022ec3c3c6, type: 3}
   m_Sprites:
   - {fileID: 21300000, guid: ab943d3d5ac38bb448fabe3cdc9516d1, type: 3}
   - {fileID: 21300000, guid: c7dd97e9cd879304795b366cbf187bfe, type: 3}
@@ -645,9 +645,9 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 3d7fe0a26ba72d949874021dc3d6995e, type: 3}
     m_FontSize: 18
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 0
     m_MaxSize: 28
@@ -656,7 +656,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 0.75
   m_Text: 'Player 1
 
     WASD + SPACE
@@ -1087,7 +1087,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 58703a5609e05408b9b01f022ec3c3c6, type: 3}
     m_FontSize: 24
     m_FontStyle: 1
     m_BestFit: 1

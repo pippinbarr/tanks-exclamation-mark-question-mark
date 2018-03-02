@@ -1,14 +1,17 @@
 # _Tanks!?_ Press Kit
 
 #### Download Tanks!?
-* [Tanks!? for Mac OS X]()
-* [Tanks!? for Windows]()
+* [Tanks!? for Mac OS X](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-mac.zip)
+* [Tanks!? for Windows](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-windows.zip)
+
+#### Play Tanks!? online
+* [Tanks!? (WebGL)](https://www.pippinbarr.com/games/tanks-exclamation-mark-question-mark/)
 
 ## The basics
 
 * Developer: [Pippin Barr](http://www.pippinbarr.com/)
 * Release: 7 March, 2018
-* Platform: Mac and PC
+* Platform: Mac OS X, Windows, Browser (WebGL)
 * Code repository: https://www.github.com/pippinbarr/tanks-exclamation-mark-question-mark/
 * Price: $0.00
 
@@ -26,9 +29,9 @@ Tanks shooting tanks! The tanks are upside down now?! Tank on tank action! Why i
 
 ## History
 
-_Tanks!?_ grew from my many engagements with Unity's [Tanks Tutorial](https://unity3d.com/learn/tutorials/s/tanks-tutorial) as I tried to learn the engine. Last year I had the idea of running my game design studio course at Concordia University by having students start with the Tanks! game from the tutorial and create variations on it. Philosophically, I wanted the class to focus on specific affordances of the Unity engine, so they're tasked with making three prototypes, one focused on Lights and Camera, one on Sound, and one on 3D Objects. These are all kind of "ontologically basic" categories of existence in the Unity engine.
+_Tanks!?_ grew from my many engagements with Unity's [Tanks Tutorial](https://unity3d.com/learn/tutorials/s/tanks-tutorial) as I tried to learn the engine. This year I had the idea of running my game design studio course at Concordia University by having students start with the Tanks! game from the tutorial and create variations on it. Philosophically, I wanted the class to focus on specific affordances of the Unity engine, so they're tasked with making three prototypes, one focused on Lights and Camera, one on Sound, and one on 3D Objects. These are all kind of "ontologically basic" categories of existence in the Unity engine.
 
-Alongside the students, I wanted to create my own project along the same lines: a meditation on the nature of the Unity engine itself, but in the form of a game. This process turned out to be exceedingly arduous as I fought with the underlying design core of how to make such a thing. The process journal for [this repository](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/wiki/Process-Journal) and the [previous repository](https://github.com/pippinbarr/tankses/wiki/PROCESS) are an exhibit of woe, confusion, and interesting ideas about the nature of Unity and its core categories.
+Alongside the students, I wanted to create my own project along the same lines: a meditation on the nature of the Unity engine itself, but in the form of a game. This process turned out to be exceedingly arduous as I fought with the underlying design core of how to make such a thing. The process journals in [this repository](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/wiki/Process-Journal) and the [previous repository](https://github.com/pippinbarr/tankses/wiki/PROCESS) are exhibits of woe, confusion, and (hopefully) interesting ideas about the nature of Unity and its core categories.
 
 All my stress was compounded by the fact that my class was meanwhile turning out _really_ impressive games based on the challenges I was giving them. I started to realise that my plan to build mini Tanks! games that played with the themes/meanings of different Unity Engine elements had been superseded by their work. There was no _need_ for me to do that work when they were already doing it - this was a really strange experience for me, but there you go.
 
@@ -50,7 +53,6 @@ _Tanks!?_ is an open source game licensed under a [Creative Commons Attribution-
 
 - Tanks!
 - Randomness!
-- Decomposition!
 - Exposed engine inner-workings!
 - Entropy!
 - The parameter-death of the gameplay universe!
@@ -84,7 +86,7 @@ _Tanks!?_ is an open source game licensed under a [Creative Commons Attribution-
 
 ## Additional Links
 
-- [Pippin's blog posts about Tanks!?](http://www.pippinbarr.com/search.html?q=tankses)
+- [Pippin's blog posts about Tanks!?](http://www.pippinbarr.com/search.html?q=tankses) (not many)
 - [Process documentation of Tanks!?](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/wiki)
 - [Commit history of Tanks!?](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/commits/master)
 - [The original Unity Tanks Tutorial](https://unity3d.com/learn/tutorials/s/tanks-tutorial)
@@ -92,7 +94,8 @@ _Tanks!?_ is an open source game licensed under a [Creative Commons Attribution-
 
 ## Credits
 
-* Pippin Barr: everything.
+* Pippin Barr: everything that isn't the original tutorial.
+* Unity Technologies: the original tutorial
 
 ## Contact
 
