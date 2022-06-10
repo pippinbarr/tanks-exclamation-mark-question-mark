@@ -4,7 +4,7 @@
 
 * Download [Tanks!? for Mac OS X](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-mac.zip)
 * Download [Tanks!? for Windows](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-windows.zip)
-* Play [Tanks!? online (WebGL)](https://pippin.github.io/tanks-exclamation-mark-question-mark/)
+* Play [Tanks!? online (WebGL)](https://pippinbarr.github.io/tanks-exclamation-mark-question-mark/)
 
 
 
