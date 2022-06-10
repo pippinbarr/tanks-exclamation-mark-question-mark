@@ -83,8 +83,7 @@ _Tanks!?_ is an open source game licensed under a [Creative Commons Attribution-
 
 ## Press
 
-- Coming soon?
-
+- Corbinais, Pierre. [Tanks?!](http://oujevipo.fr/general/6738-tanks/). Oujevipo. 7 March 2018.
 
 ## Additional Links
 
