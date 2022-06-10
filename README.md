@@ -6,7 +6,7 @@ _Tanks!?_
 
 * Download [Tanks!? for Mac OS X](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-mac.zip)
 * Download [Tanks!? for Windows](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/releases/download/v1.0/tanks-exclamation-mark-question-mark-windows.zip)
-* Play [Tanks!? online (WebGL)](https://www.pippinbarr.com/games/tanks-exclamation-mark-question-mark/)
+* Play [Tanks!? online (WebGL)](https://pippin.github.io/tanks-exclamation-mark-question-mark/)
 
 
 
@@ -16,7 +16,6 @@ __This is the second repository for the _Tanks!?_ (previously _TANKS!ES_) projec
 
 * [Code repository](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/) (you're looking at it)
 * [Process documentation](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/wiki)
-* [Blog posts about _Tanks!?_](http://www.pippinbarr.com/search.html?q=tankses)
 * [Press kit for _Tanks!?_](https://github.com/pippinbarr/tanks-exclamation-mark-question-mark/tree/master/press)
 
 ## License
